@@ -23,6 +23,9 @@ function setup() {
   document.getElementsByTagName('main')[0].style.height = cvs_height + 'px';
   bg_image = document.getElementById('bg');
   bg_image.style.visibility = 'hidden';
+  if(windowWidth<windowHeight){
+    bg_image.src = p_img_file;
+  }
   m = placePrism(); //new prism
 
   //create group with two circles and a square
@@ -135,7 +138,7 @@ let keyFunctions = {
       // let img_pattern = `<pattern id="img1" patternUnits="userSpaceOnUse" width="${cvs_width}" height="${cvs_height}">
       // <image href="${folder+img_file}" x="0" y="0" width="${cvs_width}" height="auto" />
       // </pattern>`;
-      let img_path = folder+img_file;
+      //let img_path = img_file;
       //maybe: https://stackoverflow.com/questions/3796025/fill-svg-path-element-with-a-background-image
       let stages = [{bg: 'white', stroke: 'black', fill: 'gray'},
                     {bg: 'black', stroke: 'white', fill: 'gray'},
