@@ -9,12 +9,14 @@ let end_writhe = 0.2;
 let panning = false; //is 'camera' panning?
 let i_lists = []; //list of lists of indices for each hair
 let i = 0;  //index of circle to remove
+let red_left = false; //direction of red hair motion
 
 //note that right now width is the range for control points
 //and height is the range for the bezier curve full length
 function setup() {
 
   //svg canvas to draw on with svg.js/p5.js
+
   cvs = SVG().addTo('main').size(windowWidth, windowHeight).attr({ fill: '#000' });
   //svg DOM object to manipulate with javascript
   svg = document.getElementsByTagName('svg')[0];
@@ -46,10 +48,14 @@ function setup() {
       i_list.push(j);
     }
     i_list = shuffle(i_list);
-    console.log(max(i_list), min(i_list));
     i_lists.push(i_list);
   }
- //red_hair.draw_all_circles(cvs);
+  if (floor(random(2)) == 1) {
+    red_left = true;
+    //toggle_pan();
+  }
+  document.body.style.backgroundColor = 'black';
+  //red_hair.draw_all_circles(cvs);
   //hair.draw_all_circles(cvs);
 
   //noLoop();
@@ -66,78 +72,85 @@ function draw() {
   if (frameCount < hair.circles.length) {
 
     if (panning) {
-      svg.style.left = -frameCount%windowWidth;
+      svg.style.left = -frameCount % windowWidth;
     }
     let ellipse = hair.draw_circle(cvs, frameCount);
-    let red_ellipse = red_hair.draw_circle(cvs, frameCount, '#f00', '#000');
+    let r_loc = frameCount;
+    if (red_left) { r_loc = hair.circles.length - frameCount; }
+    let red_ellipse = red_hair.draw_circle(cvs, r_loc, '#f00', '#000');
     ellipse.mouseover(function () {
       hair.writhe(2);
     });
-    // red_ellipse.mouseover(function () {
-    //   red_hair.writhe(2);
-    // });
+    red_ellipse.mouseover(function () {
+      red_hair.writhe(2);
+    });
   } else {
     if (panning) {
-      svg.style.left  += 1;
+      svg.style.left += 1;
     }
-  //noLoop();
-  //if(getFrameRate() != 6){frameRate(6)}
-  let ri = i_lists[0][i];
-  let bi = i_lists[1][i];
-  red_hair.writhe(end_writhe);
-  hair.writhe(end_writhe);
-  //if(frameCount % 2 == 0){
-  hair.circle_fades(bi);
-  // } else {
-  red_hair.circle_fades(ri);
-  // }
-  end_writhe += 0.005;
-  i++;
+    //noLoop();
+    //if(getFrameRate() != 6){frameRate(6)}
+    let ri = i_lists[0][i];
+    let bi = i_lists[1][i];
+    red_hair.writhe(end_writhe);
+    hair.writhe(end_writhe);
+    //if(frameCount % 2 == 0){
+    hair.circle_fades(bi, 100);
+    // } else {
+    red_hair.circle_fades(ri, 100);
+    // }
+    end_writhe += 0.005;
+    i++;
   }
 }
 
-function keyTyped() {
-  switch (key) {
-    case 'a': {
-      if (hair.bb == undefined) {
-        hair.bounding_box(cvs, '#ff0'); //draw bounding box
-        hair.bb.status = "one";
-      } else {
-        if (hair.bb.status) {
-          if (hair.bb.status == "one") {
-            hair.update_bounding_box();
-            hair.bb.status = "two";
-          } else {
-            hair.bb.remove();
-            hair.bb.status = false;
-          }
-        } else {
-          hair.boundingd_box(cvs, '#ff0'); //draw bounding box
-          hair.bb.status = "one";
-        }
-      }
-      break;
-    }
+// function mousePressed(){
+//   toggle_pan();
+// }
 
-    case 'd': { //toggle zoom and pan
-      toggle_pan();
-      break;
-    }
-    // case 's': {
-    //   save('medusa.svg'); //needs update
-    //   break;
-    // }
-    case 'f': {
+function keyTyped() {
+  console.log(key);
+  switch (key) {
+    case 'a': { //toggle zoom and pan
       let fll = hair.stroke;
       let strk = hair.fill;
       hair.fill = fll;
       hair.stroke = strk;
       hair.update_colors(true); //update circles
-    }
-    default:
       break;
+    }
+    case 'g': {
+      let fll = red_hair.stroke;
+      let strk = red_hair.fill;
+      red_hair.fill = strk;
+      red_hair.stroke = fll;
+      red_hair.update_colors(true); //update circles
+      break;
+    }
+    case 'd': {
+      //toggle black/white body background
+      if (document.body.style.backgroundColor == 'black') {
+        document.body.style.backgroundColor = 'white';
+      } else {
+        document.body.style.backgroundColor = 'black';
+      }
+      break;
+    }
+    case 'f': {
+      toggle_pan();
+      break;
+    }
+    default: {
+      break;
+    }
+
   }
-}
+
+
+
+
+  }
+
 function toggle_pan() {
   if (document.body.style.zoom == 1.0) {
     panning = true;

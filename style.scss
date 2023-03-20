@@ -80,8 +80,11 @@ body{margin:0; padding:0; &.noscroll{overflow:hidden;}}
 }
 
 .medusa{
-    background: black;
+    background-color: black;
+    transition-property: background-color;
+    transition-duration: 3s;
     canvas{display:none}
+    #instructions-text{border:1px white solid}
     svg{
         display: block;
         position:absolute;

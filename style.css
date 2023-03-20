@@ -97,10 +97,15 @@ body.noscroll {
 }
 
 .medusa {
-  background: black;
+  background-color: black;
+  transition-property: background-color;
+  transition-duration: 3s;
 }
 .medusa canvas {
   display: none;
+}
+.medusa #instructions-text {
+  border: 1px white solid;
 }
 .medusa svg {
   display: block;
