@@ -1,0 +1,115 @@
+#poem {
+  /*monospace font*/
+  font-family: monospace;
+  /*justify text*/
+  text-align: justify;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+body.noscroll {
+  overflow: hidden;
+}
+
+.graybreak {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  margin: auto;
+}
+.graybreak canvas {
+  display: none;
+}
+.graybreak #menu {
+  position: absolute;
+  z-index: 2;
+}
+.graybreak #bg {
+  position: absolute;
+  top: 0;
+  z-index: 0;
+  width: 100%;
+  height: auto;
+  filter: grayscale(1);
+}
+.graybreak svg {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+}
+
+#save, #instructions {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 5;
+  display: none;
+}
+#save #save-text, #save #instructions-text, #instructions #save-text, #instructions #instructions-text {
+  font-size: large;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  height: 70%;
+  background-color: black;
+  color: white;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  z-index: 4;
+  padding: 2em;
+}
+#save #save-close, #save #instructions_close, #instructions #save-close, #instructions #instructions_close {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  cursor: pointer;
+}
+#save a, #instructions a {
+  /*glowing color*/
+  color: yellow;
+  /*glowing color*/
+  font-weight: bold;
+  text-decoration: none;
+}
+#save #savelisten, #save #listen, #instructions #savelisten, #instructions #listen {
+  font-style: italic;
+  cursor: pointer;
+}
+
+.textpage {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: large;
+  width: 80%;
+  margin: 5% auto;
+}
+
+#menu {
+  position: fixed;
+  top: 1em;
+  right: 1em;
+  z-index: 2;
+}
+
+.medusa {
+  background: black;
+}
+.medusa canvas {
+  display: none;
+}
+.medusa svg {
+  display: block;
+  position: absolute;
+  /*border: 1px solid red;*/
+  top: 0;
+  left: 0;
+  padding: 0;
+  margin: 0;
+}
+
+/*# sourceMappingURL=style.css.map */
