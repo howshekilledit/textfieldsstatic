@@ -8,14 +8,14 @@ let bg_image; //background image
 let cvs_bg; //canvas background
 let cvs_width;
 let cvs_height;
+let mobile = false;
+
 
 function setup() {
-  //noLoop();
   frameRate(12);
   cvs_width = windowWidth;
   cvs_height = windowHeight;
   cvs = SVG().addTo('main').size(cvs_width, cvs_height).attr({ background: random(colors), overflow: 'hidden' });
-  //black rectangle fills canvas
   cvs_bg = cvs.rect(cvs_width, cvs_height).fill('#fff');
   document.getElementById('bg').style.width = cvs_width + 'px';
   document.getElementById('bg').style.height = 'auto';
@@ -23,11 +23,30 @@ function setup() {
   document.getElementsByTagName('main')[0].style.height = cvs_height + 'px';
   bg_image = document.getElementById('bg');
   bg_image.style.visibility = 'hidden';
-  if(windowWidth<windowHeight){
+
+  m = placePrism(); //new prism
+  if(windowWidth<windowHeight){ //if portrait, switch to appropraitely sized bg image
     img_file = p_img_file;
     bg_image.src = p_img_file;
+    mobile = true; //so we can demo mobile in browser, comment this out for production
   }
-  m = placePrism(); //new prism
+  //if mobile
+  if (navigator.userAgent.match(/Android/i)
+  || navigator.userAgent.match(/webOS/i)
+  || navigator.userAgent.match(/iPhone/i)
+  || navigator.userAgent.match(/iPad/i)
+  || navigator.userAgent.match(/iPod/i)
+  || navigator.userAgent.match(/BlackBerry/i)
+  || navigator.userAgent.match(/Windows Phone/i)) {
+     mobile = true ;
+
+
+  }
+  if(mobile){
+    let dim = m.getDim();
+    m.group.move(cvs_width/2 - dim.x / 2, cvs_height/2 - dim.y / 2)
+    frameRate(1);
+  }
 
   //create group with two circles and a square
 
@@ -39,31 +58,46 @@ function draw() {
   }
   if (looping) {
     //m.group.facets[0].polygon.move(mouseX, mouseY);
+
     let dim = m.getDim();
-    m.group.move(mouseX - dim.x / 2, mouseY - dim.y / 2);
-    if (prism_cluster) {
-      prism_cluster.group.move(mouseX - dim.x / 2, mouseY - dim.y / 2);
+    //on PC, move with mouse; on mobile, move to center
+    if (mobile){
+      m.delete();
+      m = placePrism();
+      m.updateBackfill('#fff');
+      m.sandwich();
+      dim = m.getDim();
+      m.group.move(cvs_width/2 - dim.x / 2, cvs_height/2 - dim.y / 2);
+    } else {
+      m.group.move(mouseX - dim.x / 2, mouseY - dim.y / 2);
     }
-
-
+    // if (prism_cluster) {
+    //   prism_cluster.group.move(mouseX - dim.x / 2, mouseY - dim.y / 2);
+    // }
   }
-
-
-
-
 }
+
 
 //place prism on click
 
 //on cvs click
 
 window.addEventListener('click', function (e) {
+  //if mobile, toggle looping
+  if(mobile){
+    if(isLooping()){
+      noLoop();
+    } else {
+      loop();
+    }
+  } else {
    console.log(e);
     if (m.germ) {
       m = m.germ;
     }
     m = m.copyTranslated(createVector(0, 0));
     placePrism(m);
+  }
 
 
 });
