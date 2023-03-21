@@ -24,6 +24,7 @@ function setup() {
   bg_image = document.getElementById('bg');
   bg_image.style.visibility = 'hidden';
   if(windowWidth<windowHeight){
+    img_file = p_img_file;
     bg_image.src = p_img_file;
   }
   m = placePrism(); //new prism
