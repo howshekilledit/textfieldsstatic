@@ -57,7 +57,7 @@ let prism = class {
     nFace.set_type('leg');
     this.addFacet(nFace);
   }
-  genFacets(base = createVector(0, 0), legs = createVector(random(50, 200), random(50, 200)), dims = createVector(random(20, 100), random(20, 100))) {
+  genFacets(base = createVector(0, 0), legs = createVector(random(-200, 200), random(-200, 200)), dims = createVector(random(20, 100), random(20, 100))) {
     let n_legs = legs.length;
 
     //base facet, from which legs extrude
@@ -771,9 +771,33 @@ class prismCluster {
       }
     }
   }
+  getPoints(){
+    let pts = [];
+    for(let p of this.prisms){
+      pts = pts.concat(p.getPoints());
+    }
+    return pts;
+  }
+  getExtremes(){
+    let pts = this.getPoints();
+    let x = pts.map(p=>p.x);
+    let y = pts.map(p=>p.y);
+    console.log(x, y);
+    let extm = {min:{x:min(x),y:min(y)},max:{x:max(x),y:max(y)}};
+    return extm;
+  }
+  getDim(){
+    //get points from all prisms
+    let pts = [];
+    //get extremes
+    let extm = this.getExtremes(pts);
+    //get dimensions
+    let dim = createVector(abs(extm.max.x-extm.min.x),abs(extm.max.y-extm.min.y));
+    return dim;
+  }
   drawCluster() {
     for (let p of this.prisms) {
-      p.drawAll(this.group, 'none', '#fff');
+      p.drawAll(this.group, this.germ.fill, this.germ.stroke);
     }
   }
   sandwich() {
@@ -790,7 +814,7 @@ class prismCluster {
   drawRandomThrees() {
     for (let p of this.prisms) {
       let three = random(p.threeFacets());
-      three.drawAll(this.group, 'none', '#fff');
+      three.drawAll(this.group, this.germ.fill, this.germ.stroke);
     }
   }
   delete() {

@@ -9,6 +9,7 @@ let cvs_bg; //canvas background
 let cvs_width;
 let cvs_height;
 let mobile = false;
+let mobile_options;
 
 
 function setup() {
@@ -45,7 +46,18 @@ function setup() {
   if(mobile){
     let dim = m.getDim();
     m.group.move(cvs_width/2 - dim.x / 2, cvs_height/2 - dim.y / 2)
-    frameRate(1);
+    frameRate(0.5);
+    mobile_options = [
+      function(){m.sandwich()},
+      function(){
+        m.delete();
+        m = new prismCluster(m, random(2, 5));
+        m.drawRandomThrees(); //draw random threes
+      },
+      function(){
+        m.drawAll();
+      },
+    ]
   }
 
   //create group with two circles and a square
@@ -53,9 +65,6 @@ function setup() {
 }
 
 function draw() {
-  if (cvs && looping) {
-    //cvs.remove();
-  }
   if (looping) {
     //m.group.facets[0].polygon.move(mouseX, mouseY);
 
@@ -65,7 +74,7 @@ function draw() {
       m.delete();
       m = placePrism();
       m.updateBackfill('#fff');
-      m.sandwich();
+      random(mobile_options)();
       dim = m.getDim();
       m.group.move(cvs_width/2 - dim.x / 2, cvs_height/2 - dim.y / 2);
     } else {
@@ -84,13 +93,7 @@ function draw() {
 
 window.addEventListener('click', function (e) {
   //if mobile, toggle looping
-  if(mobile){
-    if(isLooping()){
-      noLoop();
-    } else {
-      loop();
-    }
-  } else {
+if(!mobile){
    console.log(e);
     if (m.germ) {
       m = m.germ;
@@ -101,6 +104,18 @@ window.addEventListener('click', function (e) {
 
 
 });
+
+function mousePressed(){
+  if(mobile){
+    if(isLooping()){
+      looping = false;
+      noLoop();
+    } else {
+      loop();
+      looping = true;
+    }
+  }
+}
 
 //key functions
 let keyFunctions = {
