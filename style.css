@@ -117,4 +117,29 @@ body.noscroll {
   margin: 0;
 }
 
+#cookieNotice {
+  position: fixed;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  bottom: 0;
+  left: 0;
+  width: 80%;
+  padding: 2em 10%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  z-index: 5;
+}
+#cookieNotice button {
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  font-size: large;
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 0.5em;
+  cursor: pointer;
+}
+#cookieNotice a {
+  color: yellow;
+  text-decoration: none;
+}
+
 /*# sourceMappingURL=style.css.map */

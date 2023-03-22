@@ -96,3 +96,30 @@ body{margin:0; padding:0; &.noscroll{overflow:hidden;}}
 
       }
 }
+#cookieNotice{
+    position:fixed;
+    font-family:$main_font;
+    bottom:0;
+    left:0;
+    width:80%;
+ 
+    padding: 2em 10%;
+    background-color:rgba(0, 0, 0, 0.8);
+    color:white;
+    z-index:5;
+    //rounded button with black text on white
+    button{
+        background-color:rgba(0, 0, 0, 0.9);
+        color:white;
+        font-size:large;
+        border:1px solid white;
+        border-radius:5px;
+        padding:0.5em;
+        
+        cursor:pointer;
+    }
+    a{
+        color:yellow;
+        text-decoration:none;
+    }
+}

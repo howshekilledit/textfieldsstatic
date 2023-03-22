@@ -58,11 +58,30 @@ function setup() {
       function () {
         m.delete();
         m = new prismCluster(m, random(2, 5));
+        if(bg_image.style.visibility == 'visible'){
+          m.updateBackfill('#fff');
+          m.background(); //draw background
+          m.bg.opacity(0.5);
+        }
         m.drawRandomThrees(); //draw random threes
       },
       function () {
         m.drawAll();
-      },
+        if(bg_image.style.visibility == 'visible'){
+          m.updateBackfill('#fff');
+          m.background(); //draw background
+          m.bg.opacity(0.5);
+        }
+
+      }, function () {
+        if(bg_image.style.visibility == 'visible'){
+          bg_image.style.visibility = 'hidden';
+          cvs_bg.show();
+        } else {
+          bg_image.style.visibility = 'visible';
+          cvs_bg.hide(); 
+        }
+      }
     ]
   }
 
@@ -100,7 +119,6 @@ function draw() {
 window.addEventListener('click', function (e) {
   //if mobile, toggle looping
   if (!mobile) {
-    console.log(e);
     if (m.germ) {
       m = m.germ;
     }

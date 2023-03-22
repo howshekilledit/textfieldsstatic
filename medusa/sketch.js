@@ -55,7 +55,7 @@ function setup() {
     red_left = true;
     //toggle_pan();
   }
-  if ((floor(random(2)) == 1) && instructions.style.display != 'block') {
+  if ((floor(random(2)) == 1) && instructions.style.display != 'block' && document.getElementById('cookieNotice').style.display != 'block') {
     toggle_pan();
   }
   document.body.style.backgroundColor = 'black';
