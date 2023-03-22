@@ -761,6 +761,8 @@ class prismCluster {
     this.prisms.push(germPrism);
     this.container = container;
     this.group = this.container.group();
+    this.germ.stackFull(floor(random(6)), random(this.colors), random(this.colors), 0.02, this.group, false);
+    this.stack = this.germ.stack;
     for (let i = 0; i < n; i++) {
       if (caos) {
         this.prisms.push(germPrism.copyTranslated(createVector(random(-100, 100), random(-100, 100))));
@@ -782,7 +784,6 @@ class prismCluster {
     let pts = this.getPoints();
     let x = pts.map(p=>p.x);
     let y = pts.map(p=>p.y);
-    console.log(x, y);
     let extm = {min:{x:min(x),y:min(y)},max:{x:max(x),y:max(y)}};
     return extm;
   }
@@ -807,14 +808,33 @@ class prismCluster {
   }
   background() {
     this.bg = this.group.group();
+    this.bg.opacity(this.germ.bg.opacity());
     for (let p of this.prisms) {
       p.background(this.bg, this.backfill);
     }
   }
   drawRandomThrees() {
+    this.lines = [];
     for (let p of this.prisms) {
       let three = random(p.threeFacets());
       three.drawAll(this.group, this.germ.fill, this.germ.stroke);
+      this.lines.push(three.lines[0]);
+    }
+  }
+  updateStroke(stroke){
+    this.stroke = stroke;
+    if (this.lines.length > 0) {
+      for (let linegroup of this.lines) {
+        linegroup.each(function (i, children) {
+          this.stroke(stroke);
+        });
+      }
+    }
+  }
+  updateBackfill(backfill){
+    this.backfill = backfill
+    for(let p of this.prisms){
+      p.updateBackfill(backfill);
     }
   }
   delete() {

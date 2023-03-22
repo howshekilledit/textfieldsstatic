@@ -173,13 +173,17 @@ function keyTyped() {
 
 function toggle_pan() {
   if (!panning) {
-    document.getElementById('menu').style.display = 'none';
+    try{
+      document.getElementById('menu').style.display = 'none';
+    }catch{}
     panning = true;
     svg.style.top = -windowHeight / 3;
     document.body.style.zoom = 3.0;
   } else {
     document.body.style.zoom = 1.0;
-    document.getElementById('menu').style.display = 'block';
+    try{
+      document.getElementById('menu').style.display = 'block';
+    }catch{}
     svg.style.left = 0;
     svg.style.top = 0;
     panning = false;
