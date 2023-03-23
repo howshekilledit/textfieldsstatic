@@ -20,7 +20,7 @@ body{margin:0; padding:0; &.noscroll{overflow:hidden;}}
     svg{position:absolute; top:0; z-index:1;  }
 
 }
-#save, #instructions{
+#instructions{
     position:absolute;
     top:0;
     left:0;
@@ -29,7 +29,9 @@ body{margin:0; padding:0; &.noscroll{overflow:hidden;}}
     background-color:rgba(0,0,0,0.7);
     z-index:5;
     display:none;
-    #save-text, #instructions-text{
+    color:white;
+
+     #instructions-text{
         font-size:large;
         position:absolute;
         top:50%;
@@ -38,13 +40,12 @@ body{margin:0; padding:0; &.noscroll{overflow:hidden;}}
         width:70%;
         height:70%;
         background-color:rgba(0, 0, 0, 1);
-        color:white;
         font-family:$main_font;
         z-index:4;
         padding:2em;
 
     }
-    #save-close, #instructions_close{
+    #instructions_close{
         position:absolute;
         top:1em;
         right:1em;
@@ -58,7 +59,7 @@ body{margin:0; padding:0; &.noscroll{overflow:hidden;}}
         font-weight:bold;
         text-decoration:none;
     }
-    #savelisten, #listen{
+    #listen{
         font-style:italic;
         cursor:pointer;
     }
@@ -72,17 +73,57 @@ body{margin:0; padding:0; &.noscroll{overflow:hidden;}}
 
 }
 
+.gallery{h2{margin-top: 1.1em;}}
+ul.hori{
+    &.works{font-size:larger}
+    display:flex;
+    flex-wrap:wrap;
+    //justify-content:space-around;
+    justify-content: space-between;
+    margin:0;
+    padding:0;
+    li{
+        list-style:none;
+        margin:0;
+        padding:0;
+        margin-bottom:1em;
+        img{
+            width:100%;
+            height:auto;
+            cursor:pointer;
+        }
+    }
+}
+
+
 #menu{
+    width:150px;
     position:fixed;
-    top:1em;
+    font-family:$main_font;
+    font-size: medium;
     right: 1em;
+    top:1em;
     z-index:2;
+    text-align:right;
+    ul{display:inline; margin:0}
+    li{
+        list-style:none;
+        display:none; //hide menu items
+        &.show{display:block;} //show menu items
+        &.inline{display:inline;}
+        margin:0;
+        padding:0;
+        margin-bottom:1em;
+    }
+    ul.compressed{li{margin:0}}
+    #menu-toggle{cursor:pointer}
 }
 
 .medusa{
     background-color: black;
     transition-property: background-color;
     transition-duration: 3s;
+    a{color:white}
     canvas{display:none}
     #instructions-text{border:1px white solid}
     svg{
@@ -95,6 +136,29 @@ body{margin:0; padding:0; &.noscroll{overflow:hidden;}}
         margin:0;
 
       }
+}
+form{
+    font-family:$main_font;
+    ul{margin:0;}
+    label{font-weight:bolder; }
+    input{
+    
+        font-family:$main_font;
+        padding:0.5em;
+        border:1px solid black;
+        border-radius:5px;
+        margin:0.5em;
+    }
+    
+    button{
+        font-size:large;
+        font-family:$main_font;
+        padding:0.5em;
+        border:1px solid black;
+        border-radius:5px;
+        margin:0.5em;
+        cursor:pointer;
+    }
 }
 #cookieNotice{
     position:fixed;

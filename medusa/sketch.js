@@ -151,8 +151,11 @@ function keyTyped() {
       //toggle black/white body background
       if (document.body.style.backgroundColor == 'black') {
         document.body.style.backgroundColor = 'white';
+        document.getElementById('menu-toggle').style.color = 'black';
       } else {
         document.body.style.backgroundColor = 'black';
+        document.getElementById('menu-toggle').style.color = 'white';
+
       }
       break;
     }
