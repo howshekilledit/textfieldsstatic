@@ -15,9 +15,11 @@ let fll = 'gray';
 let img;
 let l_img;
 let p_img;
-let img_pattern; 
+let bg_img; //background image
+let img_pattern;
+let bg_pattern; //background pattern
 
-function preload(){
+function preload() {
   l_img = loadImage(l_img_file);
   p_img = loadImage(p_img_file);
 }
@@ -35,11 +37,36 @@ function setup() {
   bg_image = document.getElementById('bg');
   bg_image.style.visibility = 'hidden';
 
-  m = placePrism(); //new prism
+  let image_dim; //image dimensions
+
+  image_dim = createVector();
+  //if mobile, create pattern dimensions sclaed to image height
   if (windowWidth < windowHeight) { //if portrait, switch to appropraitely sized bg image
- 
-    mobile = true; //so we can demo mobile in browser, comment this out for production
+    img_file = p_img_file;
+    bg_img = p_img;
+    image_dim.x = cvs_height * p_img.width / p_img.height;
+    image_dim.y = cvs_height;
+    //mobile = true; //so we can demo mobile in browser, comment this out for production
+  } else {
+    img_file = l_img_file;
+    bg_img = l_img;
+    image_dim.x = cvs_width;
+    //scale image height to image width
+    image_dim.y = cvs_width * l_img.height / l_img.width;
   }
+
+  //create svg pattern with image
+
+  img_pattern = cvs.pattern(image_dim.x, image_dim.y, function (add) {
+    add.image(img_file, 0, 0, image_dim.x, image_dim.y);
+  });
+  bg_pattern = cvs.pattern(image_dim.x, image_dim.y, function (add) {
+    add.image(img_file, 0, 0, image_dim.x, image_dim.y);
+  });
+
+  //place initial prism 
+  m = placePrism(); //new prism
+ 
   //if mobile
   if (navigator.userAgent.match(/Android/i)
     || navigator.userAgent.match(/webOS/i)
@@ -49,17 +76,15 @@ function setup() {
     || navigator.userAgent.match(/BlackBerry/i)
     || navigator.userAgent.match(/Windows Phone/i)) {
     mobile = true;
-
-
   }
- 
+
   cvs_bg.attr('filter', 'grayscale(1)')
   if (mobile) {
-    img_file = p_img_file;
+    
     bg_image.src = p_img_file;
     let dim = m.getDim();
     m.group.move(cvs_width / 2 - dim.x / 2, cvs_height / 2 - dim.y / 2)
-    frameRate(0.5);
+    frameRate(1);
     content_div.innerHTML =
       `<p>Tap the screen to freeze and unfreeze the animation.</p>
     <p>Use link on upper right to save a still.</p>
@@ -68,56 +93,27 @@ function setup() {
     mobile_options = [
       function () { m.sandwich() },
       function () {
+        let l = new prismCluster(m, random(2, 5));
         m.delete();
-        m = new prismCluster(m, random(2, 5));
-        if(cvs_bg.fill() != '#ffffff'){
-          m.updateBackfill('#fff');
-          m.background(); //draw background
-          m.bg.opacity(0.5);
-        }
+        m = l; 
+        m.background(); //draw background
+        m.bg.opacity(0.5);
         m.drawRandomThrees(); //draw random threes
       },
       function () {
-        if(bg_image.style.visibility == 'visible'){
-          m.updateBackfill('#fff');
-          m.background(); //draw background
-          m.bg.opacity(0.5);
-        }
         m.drawAll();
-       
-
+        m.background(); //draw background
+        m.bg.opacity(0.5);
       }, function () {
-        if(cvs_bg.fill() == '#ffffff'){
+        if (cvs_bg.fill() == '#ffffff') {
           cvs_bg.fill(img_pattern);
+          m.bg.opacity(0.5);
         } else {
           cvs_bg.fill('#ffffff');
         }
       }
     ]
   }
-    let image_dim; //image dimensions
-
-    image_dim = createVector();
-    //if mobile, create pattern dimensions sclaed to image height
-  
-    if (mobile) {
-      image_dim.x = cvs_height * p_img.width / p_img.height;
-      image_dim.y = cvs_height;
-    } else {
-      image_dim.x = cvs_width;
-      //scale image height to image width
-      image_dim.y = cvs_width * l_img.height / l_img.width;
-    }
-    //create svg pattern with image
-    
-    img_pattern = cvs.pattern(image_dim.x, image_dim.y, function (add) {
-      add.image(img_file, 0, 0, image_dim.x, image_dim.y);
-    });
-  
-  
-
-  //create group with two circles and a square
-
 }
 
 function draw() {
@@ -162,14 +158,16 @@ window.addEventListener('click', function (e) {
 
 function mousePressed() {
   if (mobile) {
-    if (isLooping()) {
-      looping = false;
-      noLoop();
-    } else {
-      loop();
-      looping = true;
-    }
+    if(document.getElementById('instructions').style.display != 'block'){
+      if (isLooping()) {
+        looping = false;
+        noLoop();
+      } else {
+        loop();
+        looping = true;
+      }
   }
+}
 }
 
 //key functions
@@ -191,139 +189,148 @@ let keyFunctions = {
   },
   's': {
     fnctn: function () {
-        if (this.bool) { //if lines are visible
+      if (this.bool) { //if lines are visible
+        for (let l of m.lines) {
+          l.hide();
+        }
+        this.bool = false;
+      } else { //if lines are invisible
+        if (m.germ) { //check if cluster
           for (let l of m.lines) {
-            l.hide();
+            l.show();
           }
-          this.bool = false;
-        } else { //if lines are invisible
-          if (m.germ) { //check if cluster
-            for (let l of m.lines) {
-              l.show();
-            }
-          } else {
-            m.line_index = floor(random(m.lines.length));
-            m.lines[m.line_index].show();
-          }
-          this.bool = true;
-        }
-
-      }, desc: 'toggle line visibility/line group',
-        bool: true
-    },
-    // 's': {fnctn: function () {
-    //   m.delete();
-    //   m.stackFull(0, m.c1, m.c2, 0.5);
-    // }, desc: 'solid gradient stack prism',
-    // bool: false},
-    'd': {
-      fnctn: function () {
-        //toggle background opaque, 50% invisible
-        if(m.germ){ //if cluster move stack forward to visible
-          m.stack.front();
-        }
-        if (m.stack.opacity() == 1) {
-          m.stack.opacity(0.5);
         } else {
-          if (m.stack.opacity() == 0.5) {
-            m.stack.opacity(0);
-          } else {
-            m.stack.opacity(1);
-          }
+          m.line_index = floor(random(m.lines.length));
+          m.lines[m.line_index].show();
         }
-      }, desc: 'toggle stack',
-      bool: false
-    },
-    //cluster should inherit properties of germ and toggle
-    'f': {
-      fnctn: function () {
-        //m.group.hide();
-        if (!this.bool) {
-          m.delete();
-          m = new prismCluster(m, random(3, 6));
-          m.background();
-          m.drawRandomThrees(); //draw random threes
+        this.bool = true;
+      }
 
-          this.bool = true;
+    }, desc: 'toggle line visibility/line group',
+    bool: true
+  },
+  // 's': {fnctn: function () {
+  //   m.delete();
+  //   m.stackFull(0, m.c1, m.c2, 0.5);
+  // }, desc: 'solid gradient stack prism',
+  // bool: false},
+  'd': {
+    fnctn: function () {
+      //toggle background opaque, 50% invisible
+      if (m.germ) { //if cluster move stack forward to visible
+        m.stack.front();
+      }
+      if (m.stack.opacity() == 1) {
+        m.stack.opacity(0.5);
+      } else {
+        if (m.stack.opacity() == 0.5) {
+          m.stack.opacity(0);
+        } else {
+          m.stack.opacity(1);
         }
-        else {
+      }
+    }, desc: 'toggle stack',
+    bool: false
+  },
+  //cluster should inherit properties of germ and toggle
+  'f': {
+    fnctn: function () {
+      //m.group.hide();
+      if (!this.bool) {
+        m.delete();
+        m = new prismCluster(m, random(3, 6));
+        m.background();
+        m.drawRandomThrees(); //draw random threes
+
+        this.bool = true;
+      }
+      else {
+        if (m.germ) {
           m.delete();
           m = placePrism(m.germ);
           this.bool = false;
-
-
-        }
-        // m.background();
-        // m.drawRandomThrees();
-      }, desc: 'draw cluster with random threes, creating broken geometry',
-      bool: false
-    },
-
-
-    'g': {
-      fnctn: function () { //change background
-        // let img_pattern = `<pattern id="img1" patternUnits="userSpaceOnUse" width="${cvs_width}" height="${cvs_height}">
-        // <image href="${folder+img_file}" x="0" y="0" width="${cvs_width}" height="auto" />
-        // </pattern>`;
-        //let img_path = img_file;
-        //maybe: https://stackoverflow.com/questions/3796025/fill-svg-path-element-with-a-background-image
-        let stages = [{ bg: 'white', stroke: 'black', fill: 'gray' },
-        { bg: 'black', stroke: 'white', fill: 'gray' },
-        { bg: img_pattern, stroke: 'black', fill: 'white' },
-        { bg: img_pattern, stroke: 'white', fill: 'black' },
-        ];
-        this.stage = (this.stage + 1) % stages.length;
-        let stage = stages[this.stage];
-        if (stage.bg == 'image') {
-          cvs_bg.hide();
-          bg_image.style.visibility = 'visible';
         } else {
-          cvs_bg.show();
-          cvs_bg.fill(stage.bg);
-
+          m.delete();
+          m = placePrism(m);
+          this.bool = false;
         }
-        //m.delete();
-        m.updateStroke(stage.stroke);
-        m.updateBackfill(stage.fill);
-        strk = stage.stroke;
-        fll = stage.fill;
+      }
+      // m.background();
+      // m.drawRandomThrees();
+    }, desc: 'draw cluster with random threes, creating broken geometry',
+    bool: false
+  },
+
+
+  'g': {
+    fnctn: function () { //change background
+      // let img_pattern = `<pattern id="img1" patternUnits="userSpaceOnUse" width="${cvs_width}" height="${cvs_height}">
+      // <image href="${folder+img_file}" x="0" y="0" width="${cvs_width}" height="auto" />
+      // </pattern>`;
+      //let img_path = img_file;
+      //maybe: https://stackoverflow.com/questions/3796025/fill-svg-path-element-with-a-background-image
+      let stages = [{ bg: 'white', stroke: 'black', fill: 'gray' },
+      { bg: 'black', stroke: 'white', fill: 'gray' },
+      { bg: bg_pattern, stroke: 'black', fill: 'white' },
+      { bg: bg_pattern, stroke: 'white', fill: 'black' },
+      ];
+      
+      this.stage = (this.stage + 1) % stages.length;
+      let stage = stages[this.stage];
+      if (stage.bg == 'image') {
+        cvs_bg.hide();
+        bg_image.style.visibility = 'visible';
+      } else {
+        cvs_bg.show();
+        cvs_bg.fill(stage.bg);
+
+      }
+      //m.delete();
+      m.updateStroke(stage.stroke);
+      m.updateBackfill(stage.fill);
+      strk = stage.stroke;
+      fll = stage.fill;
 
 
 
-      }, desc: 'change canvas background',
-      stage: 0
-    },
-    'h': {
-      fnctn: function () {
-        m.delete();
-        m = placePrism();
-      }, desc: 'change current prism for new',
-      bool: false
-    },
+    }, desc: 'change canvas background',
+    stage: 0
+  },
+  'h': {
+    fnctn: function () {
+      if(m.bg.opacity() == 0){m.bg.opacity(1);}
+      m.toggleMask();
+      // m.delete();
+      // m = placePrism();
+    }, desc: 'change current prism for new',
+    bool: false
+  },
 
-    // 'k': {
-    //   fnctn: function () {
-    //     // if (bg_image.style.filter != 'grayscale(100%)') {
-    //     bg_image.style.filter = 'grayscale(100%)';
-    //     // } else {
-    //     //   bg_image.style.filter = 'grayscale(0%)';
-    //     // }
-    //   }, desc: 'toggle grayscale background', bool: false
-    // },
 
-  }
+  // 'k': {
+  //   fnctn: function () {
+  //     // if (bg_image.style.filter != 'grayscale(100%)') {
+  //     bg_image.style.filter = 'grayscale(100%)';
+  //     // } else {
+  //     //   bg_image.style.filter = 'grayscale(0%)';
+  //     // }
+  //   }, desc: 'toggle grayscale background', bool: false
+  // },
+
+}
 
 //different actions on keypress
 function keyPressed() {
-    if (keyFunctions[key]) {
+  if (keyFunctions[key]) {
 
-  keyFunctions[key].fnctn();
+    keyFunctions[key].fnctn();
 
-}
+  }
 }
 
 
 function placePrism(p = false, stroke = strk, fill = fll) {
+  let msk = { width: cvs_width, height: cvs_height, fill: img_pattern };
   if (!p) {
     p = new prism([], cvs, colors, stroke, fill);
     p.genFacets();
