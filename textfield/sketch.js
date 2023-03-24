@@ -16,6 +16,7 @@ let img;
 let l_img;
 let p_img;
 let img_pattern;
+let mask_bg;
 
 function preload(){
   l_img = loadImage(l_img_file);
@@ -53,7 +54,8 @@ function setup() {
 
   }
  
-  cvs_bg.attr('filter', 'grayscale(1)')
+  cvs_bg.attr('filter', 'grayscale(1)');
+
   if (mobile) {
     img_file = p_img_file;
     bg_image.src = p_img_file;
@@ -78,21 +80,23 @@ function setup() {
         m.drawRandomThrees(); //draw random threes
       },
       function () {
-        m.drawAll();
-        if(bg_image.style.visibility == 'visible'){
+        if(cvs_bg.fill() != '#ffffff'){
           m.updateBackfill('#fff');
           m.background(); //draw background
           m.bg.opacity(0.5);
         }
+        m.drawAll();
 
       }, function () {
         if(cvs_bg.fill() == '#ffffff'){
           cvs_bg.fill(img_pattern);
+          m.bg.opacity(0.5);
         } else {
           cvs_bg.fill('#ffffff');
         }
       }
     ]
+  }
     let image_dim; //image dimensions
 
     image_dim = createVector();
@@ -111,7 +115,10 @@ function setup() {
     img_pattern = cvs.pattern(image_dim.x, image_dim.y, function (add) {
       add.image(img_file, 0, 0, image_dim.x, image_dim.y);
     });
-  }
+
+  //create background with pattern for masking
+  mask_bg = cvs.rect(cvs_width, cvs_height).fill(img_pattern).hide();
+  
   
 
   //create group with two circles and a square
@@ -272,14 +279,7 @@ let keyFunctions = {
         ];
         this.stage = (this.stage + 1) % stages.length;
         let stage = stages[this.stage];
-        if (stage.bg == 'image') {
-          cvs_bg.hide();
-          bg_image.style.visibility = 'visible';
-        } else {
-          cvs_bg.show();
-          cvs_bg.fill(stage.bg);
-
-        }
+        cvs_bg.fill(stage.bg);
         //m.delete();
         m.updateStroke(stage.stroke);
         m.updateBackfill(stage.fill);
@@ -291,6 +291,18 @@ let keyFunctions = {
       }, desc: 'change canvas background',
       stage: 0
     },
+    // 'h': {
+    //   fnctn: function () {
+    //     if(this.bool == false){
+    //       m.bg.maskWith(mask_bg.show());
+    //       this.bool = true;
+    //     } else {
+    //       mask_bg_bg.hide(); 
+    //       this.bool = false;
+    //     }
+    //   }, desc: 'change current prism for new',
+    //   bool: false
+    // },
     'h': {
       fnctn: function () {
         m.delete();
