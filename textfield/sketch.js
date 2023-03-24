@@ -12,6 +12,14 @@ let mobile = false;
 let mobile_options;
 let strk = '#000';
 let fll = 'gray';
+let img;
+let l_img;
+let p_img;
+
+function preload(){
+  l_img = loadImage(l_img_file);
+  p_img = loadImage(p_img_file);
+}
 
 function setup() {
   frameRate(12);
@@ -28,8 +36,7 @@ function setup() {
 
   m = placePrism(); //new prism
   if (windowWidth < windowHeight) { //if portrait, switch to appropraitely sized bg image
-    img_file = p_img_file;
-    bg_image.src = p_img_file;
+ 
     mobile = true; //so we can demo mobile in browser, comment this out for production
   }
   //if mobile
@@ -44,7 +51,11 @@ function setup() {
 
 
   }
+ 
+  cvs_bg.attr('filter', 'grayscale(1)')
   if (mobile) {
+    img_file = p_img_file;
+    bg_image.src = p_img_file;
     let dim = m.getDim();
     m.group.move(cvs_width / 2 - dim.x / 2, cvs_height / 2 - dim.y / 2)
     frameRate(0.5);
@@ -58,7 +69,7 @@ function setup() {
       function () {
         m.delete();
         m = new prismCluster(m, random(2, 5));
-        if(bg_image.style.visibility == 'visible'){
+        if(cvs_bg.fill() != '#ffffff'){
           m.updateBackfill('#fff');
           m.background(); //draw background
           m.bg.opacity(0.5);
@@ -74,16 +85,33 @@ function setup() {
         }
 
       }, function () {
-        if(bg_image.style.visibility == 'visible'){
-          bg_image.style.visibility = 'hidden';
-          cvs_bg.show();
+        if(cvs_bg.fill() == '#ffffff'){
+          cvs_bg.fill(img_pattern);
         } else {
-          bg_image.style.visibility = 'visible';
-          cvs_bg.hide(); 
+          cvs_bg.fill('#ffffff');
         }
       }
     ]
+    let image_dim; //image dimensions
+
+    image_dim = createVector();
+    //if mobile, create pattern dimensions sclaed to image height
+  
+    if (mobile) {
+      image_dim.x = cvs_height * p_img.width / p_img.height;
+      image_dim.y = cvs_height;
+    } else {
+      image_dim.x = cvs_width;
+      //scale image height to image width
+      image_dim.y = cvs_width * l_img.height / l_img.width;
+    }
+    //create svg pattern with image
+    
+    img_pattern = cvs.pattern(image_dim.x, image_dim.y, function (add) {
+      add.image(img_file, 0, 0, image_dim.x, image_dim.y);
+    });
   }
+  
 
   //create group with two circles and a square
 
@@ -238,8 +266,8 @@ let keyFunctions = {
         //maybe: https://stackoverflow.com/questions/3796025/fill-svg-path-element-with-a-background-image
         let stages = [{ bg: 'white', stroke: 'black', fill: 'gray' },
         { bg: 'black', stroke: 'white', fill: 'gray' },
-        { bg: 'image', stroke: 'black', fill: 'white' },
-        { bg: 'image', stroke: 'white', fill: 'black' },
+        { bg: img_pattern, stroke: 'black', fill: 'white' },
+        { bg: img_pattern, stroke: 'white', fill: 'black' },
         ];
         this.stage = (this.stage + 1) % stages.length;
         let stage = stages[this.stage];

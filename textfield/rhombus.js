@@ -24,6 +24,7 @@ let prism = class {
       this.lines.push(linegroup.lines[0]); //add the group to the lines array
     }
     this.background(); //draw background + create this.bg
+    try{this.bg.maskWith(mask_bg);}catch{} //mask background with mask
 
 
 
@@ -46,6 +47,7 @@ let prism = class {
         this.stroke(backfill);
       }); //update background fill
     }
+    try{this.bg.maskWith(mask_bg);}catch{} //mask background with mask
   }
   //generates a facet from two vertices and a leg vector
   genFacet(v, nv, lg) {
@@ -835,6 +837,10 @@ class prismCluster {
     this.backfill = backfill
     for(let p of this.prisms){
       p.updateBackfill(backfill);
+    }
+    if(this.bg){
+      try{this.bg.maskWith(mask_bg);}catch{} //mask background with mask
+
     }
   }
   delete() {
