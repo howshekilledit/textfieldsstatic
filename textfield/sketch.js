@@ -15,6 +15,7 @@ let fll = 'gray';
 let img;
 let l_img;
 let p_img;
+let img_pattern;
 
 function preload(){
   l_img = loadImage(l_img_file);
