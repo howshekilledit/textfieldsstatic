@@ -325,6 +325,9 @@ form button {
   .keyboard .key, .keyboard .keytext {
     display: inline-block;
   }
+  .keyboard .key #menu, .keyboard .keytext #menu {
+    display: block;
+  }
 }
 .keyboard.textfield {
   display: none;

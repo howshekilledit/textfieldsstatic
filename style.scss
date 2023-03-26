@@ -286,7 +286,9 @@ form{
         &:hover{background-color:navy}
         @include mobile{
             display:inline-block;
+            & #menu{display:block;}
         }
+        
     }
     &.textfield{
         display:none;
