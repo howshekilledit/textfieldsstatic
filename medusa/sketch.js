@@ -10,7 +10,8 @@ let panning = false; //is 'camera' panning?
 let i_lists = []; //list of lists of indices for each hair
 let i = 0;  //index of circle to remove
 let red_left = false; //direction of red hair motion
-
+let mobile; 
+let f; 
 //note that right now width is the range for control points
 //and height is the range for the bezier curve full length
 function setup() {
@@ -60,6 +61,17 @@ function setup() {
   }
   document.body.style.backgroundColor = 'black';
 
+    //if mobile
+  if (navigator.userAgent.match(/Android/i)
+    || navigator.userAgent.match(/webOS/i)
+    || navigator.userAgent.match(/iPhone/i)
+    || navigator.userAgent.match(/iPad/i)
+    || navigator.userAgent.match(/iPod/i)
+    || navigator.userAgent.match(/BlackBerry/i)
+    || navigator.userAgent.match(/Windows Phone/i)) {
+    mobile = true;
+    instructions.style.display = 'none'; //hide instructions if mobile
+  }
   //red_hair.draw_all_circles(cvs);
   //hair.draw_all_circles(cvs);
 
@@ -73,19 +85,24 @@ function setup() {
 
 
 function draw() {
+  f = frameCount%(hair.circles.length*2); //frame count of this cycle
   if(instructions.style.display == 'block'){
     noLoop();
   } else {
     loop();
   }
-  if (frameCount%(hair.circles.length*2) < hair.circles.length) { //while hair is growing
-
-    if (panning) {
-      svg.style.left = -frameCount % windowWidth;
+  if (f < hair.circles.length) { //while hair is growing
+    if(!panning){ //enforce panning if mobile
+      if(mobile){
+        toggle_pan();
+      }
     }
-    let ellipse = hair.draw_circle(cvs, frameCount%(hair.circles.length*2));
-    let r_loc =frameCount%(hair.circles.length*2)-1;
-    if (red_left) { r_loc = hair.circles.length - frameCount%(hair.circles.length*2)-1; }
+    if (panning) {
+      svg.style.left = -f % windowWidth;
+    }
+    let ellipse = hair.draw_circle(cvs, f);
+    let r_loc =f-1;
+    if (red_left) { r_loc = hair.circles.length - f; }
     let red_ellipse;
     try{
       red_ellipse = red_hair.draw_circle(cvs, r_loc, '#f00', '#000');
@@ -118,7 +135,7 @@ function draw() {
     end_writhe += 0.005;
     i++;
   }
-  if(frameCount%hair.circles.length*2 == hair.circles.length*2-1){
+  if(f == hair.circles.length*2-1){
     noLoop();
     cvs.remove();
     end_writhe = 0.2;

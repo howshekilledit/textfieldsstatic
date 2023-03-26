@@ -1,10 +1,71 @@
 $main_font:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
+//mobile mixin
+@mixin mobile{
+    @media only screen and (max-width: 600px){
+        @content;
+    }
+}
+
+//parent class mixin
+@mixin parent($parent){
+    @at-root #{&} {
+        @at-root #{&}#{$parent} {
+            @content;
+        }
+    }
+}
+
+/*EVERY WORD */
+/*see everyword.html for server side styles*/
 #poem{
-    /*monospace font*/
-    font-family: monospace;
-    /*justify text*/
+    font-family: 'Courier New', Courier, monospace;
     text-align: justify;
+    text-justify: inter-word;
+    position:absolute !important;
+    max-width:80%; 
+    font-weight:bold;
+    color: #000;
+    z-index:3;
+    @include mobile{
+        top:5em !important;
+        left:15% !important;
+    };
+}
+
+.background{
+    font-family: 'Courier New', Courier, monospace;
+    color:#bdbdbd;
+    background: #D3D3D3;
+    /* drop shadow */
+    text-shadow: 0 0 0.5em #a8a8a8;
+    text-align: justify;
+    z-index:0;
+    -moz-transform:    scaleX(-1); /* Gecko */
+    -o-transform:      scaleX(-1); /* Opera */
+    -webkit-transform: scaleX(-1); /* Webkit */
+    transform:         scaleX(-1); /* Standard */
+
+    filter: FlipH;                 /* IE 6/7/8 */
+
+
+}
+#poemshadow{
+    font-family: 'Courier New', Courier, monospace;
+    position:absolute;
+    text-align: justify;
+    text-justify: inter-word;
+    z-index: 1;
+    overflow:hidden;
+}
+#poemshadow .choose{color:darkgrey;}
+.glow{
+    font-size:20px;
+    cursor:pointer;
+}
+.everyword{
+    overflow:hidden;
+    #menu{a {color:black}}
 }
 
 body{margin:0; padding:0; &.noscroll{overflow:hidden;}}
@@ -98,11 +159,13 @@ ul.hori{
 
 #menu{
     width:150px;
-    position:fixed;
-    font-family:$main_font;
     font-size: medium;
+
+    height:1em;
+    position:absolute;
+    font-family:$main_font;
     right: 1em;
-    top:1em;
+    top:0;
     z-index:2;
     text-align:right;
     ul{display:inline; margin:0}
@@ -113,7 +176,7 @@ ul.hori{
         &.inline{display:inline;}
         margin:0;
         padding:0;
-        margin-bottom:1em;
+        //margin-bottom:1em;
     }
     ul.compressed{li{margin:0}}
     #menu-toggle{cursor:pointer}
@@ -187,3 +250,59 @@ form{
         text-decoration:none;
     }
 }
+
+.keyboard{
+   // display:none;
+    font-family: $main_font;
+    position:absolute;
+    left:1em;
+    top:1em;
+        // left:50%;
+        // transform:translate(-50%, 0%);
+        z-index:5; 
+    .key, .keytext{
+        display:block;
+        font-weight:bold;
+        min-width:2em;
+        height:2em;
+        //border:1px solid black;
+        color: rgba(255, 255, 255,0.8);
+        //transluscent black fill
+        /*animate background color for 10 seconds after page loads*/
+        animation: background-color 5s 3;
+        @keyframes background-color {
+            0% {background-color:rgba(150, 150, 150,0.7);}
+            50% {background-color:rgba(100, 100, 100, 0.8);}
+            100% {background-color:rgba(150, 150, 150,0.7);}
+        }
+        background-color:rgba(150, 150, 150,0.7);
+        border-radius:5px;
+        margin:0.2em;
+        text-align:center;
+        line-height:2em;
+        font-size:larger;
+        cursor:pointer;
+        &.active{background-color:yellow}
+        &:hover{background-color:navy}
+        @include mobile{
+            display:inline-block;
+        }
+    }
+    &.textfield{
+        display:none;
+    }
+    // .key{ //<-- for graybreak
+    //     //display:none;
+    //     @include mobile{
+    //         display:inline-block;
+    //     }
+    // }
+    // .keytext, .ctrl_tggl{
+    //     display:inline-block;
+    //     @include mobile{
+    //         //display:none;;
+    //     }
+    // }
+   
+}
+

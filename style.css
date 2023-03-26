@@ -1,8 +1,65 @@
+/*EVERY WORD */
+/*see everyword.html for server side styles*/
 #poem {
-  /*monospace font*/
-  font-family: monospace;
-  /*justify text*/
+  font-family: "Courier New", Courier, monospace;
   text-align: justify;
+  text-justify: inter-word;
+  position: absolute !important;
+  max-width: 80%;
+  font-weight: bold;
+  color: #000;
+  z-index: 3;
+}
+@media only screen and (max-width: 600px) {
+  #poem {
+    top: 5em !important;
+    left: 15% !important;
+  }
+}
+
+.background {
+  font-family: "Courier New", Courier, monospace;
+  color: #bdbdbd;
+  background: #D3D3D3;
+  /* drop shadow */
+  text-shadow: 0 0 0.5em #a8a8a8;
+  text-align: justify;
+  z-index: 0;
+  -moz-transform: scaleX(-1);
+  /* Gecko */
+  -o-transform: scaleX(-1);
+  /* Opera */
+  -webkit-transform: scaleX(-1);
+  /* Webkit */
+  transform: scaleX(-1);
+  /* Standard */
+  filter: FlipH;
+  /* IE 6/7/8 */
+}
+
+#poemshadow {
+  font-family: "Courier New", Courier, monospace;
+  position: absolute;
+  text-align: justify;
+  text-justify: inter-word;
+  z-index: 1;
+  overflow: hidden;
+}
+
+#poemshadow .choose {
+  color: darkgrey;
+}
+
+.glow {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.everyword {
+  overflow: hidden;
+}
+.everyword #menu a {
+  color: black;
 }
 
 body {
@@ -117,11 +174,12 @@ ul.hori li img {
 
 #menu {
   width: 150px;
-  position: fixed;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: medium;
+  height: 1em;
+  position: absolute;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   right: 1em;
-  top: 1em;
+  top: 0;
   z-index: 2;
   text-align: right;
 }
@@ -134,7 +192,6 @@ ul.hori li img {
   display: none;
   margin: 0;
   padding: 0;
-  margin-bottom: 1em;
 }
 #menu li.show {
   display: block;
@@ -222,6 +279,55 @@ form button {
 #cookieNotice a {
   color: yellow;
   text-decoration: none;
+}
+
+.keyboard {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  position: absolute;
+  left: 1em;
+  top: 1em;
+  z-index: 5;
+}
+.keyboard .key, .keyboard .keytext {
+  display: block;
+  font-weight: bold;
+  min-width: 2em;
+  height: 2em;
+  color: rgba(255, 255, 255, 0.8);
+  /*animate background color for 10 seconds after page loads*/
+  animation: background-color 5s 3;
+  background-color: rgba(150, 150, 150, 0.7);
+  border-radius: 5px;
+  margin: 0.2em;
+  text-align: center;
+  line-height: 2em;
+  font-size: larger;
+  cursor: pointer;
+}
+@keyframes background-color {
+  0% {
+    background-color: rgba(150, 150, 150, 0.7);
+  }
+  50% {
+    background-color: rgba(100, 100, 100, 0.8);
+  }
+  100% {
+    background-color: rgba(150, 150, 150, 0.7);
+  }
+}
+.keyboard .key.active, .keyboard .keytext.active {
+  background-color: yellow;
+}
+.keyboard .key:hover, .keyboard .keytext:hover {
+  background-color: navy;
+}
+@media only screen and (max-width: 600px) {
+  .keyboard .key, .keyboard .keytext {
+    display: inline-block;
+  }
+}
+.keyboard.textfield {
+  display: none;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -237,14 +237,18 @@ class medusa {
                 { width: 1, color: strk }).fill('none');
     }
     circle_fades(index, duration = 2000) { //fade out circle at index
-        let c = this.circles[index];
-        if (c.ellipse) {
-            c.ellipse.animate({duration: duration}).opacity(0);
+        try {
+            let c = this.circles[index];
+            if (c.ellipse) {
+                c.ellipse.animate({ duration: duration }).opacity(0);
+            }
+        } catch (e) {
+            console.log(e);
         }
     }
-    delete(){
-        for(let c of this.circles){
-            if(c.ellipse){
+    delete() {
+        for (let c of this.circles) {
+            if (c.ellipse) {
                 c.ellipse.remove();
             }
         }
