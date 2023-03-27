@@ -276,7 +276,12 @@ let prism = class {
       if(this.lines){
         //get visibility of lines
         copied.lines.map(l => l.hide());
-        copied.lines[this.line_index].show();
+        if(this.lines[this.line_index].visible()){
+          copied.lines[this.line_index].show();
+        }
+      }
+      if(this.stack){
+        copied.stack.opacity(this.stack.opacity());
       }
     };
     return copied;

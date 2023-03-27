@@ -262,18 +262,18 @@ form{
         z-index:5; 
     .key, .keytext{
         display:block;
+        &.textfield {display:inline-block;}
         font-weight:bold;
-        min-width:2em;
+        width:2em;
         height:2em;
         //border:1px solid black;
         color: rgba(255, 255, 255,0.8);
         //transluscent black fill
         /*animate background color for 10 seconds after page loads*/
-        animation: background-color 5s 3;
-        @keyframes background-color {
-            0% {background-color:rgba(150, 150, 150,0.7);}
-            50% {background-color:rgba(100, 100, 100, 0.8);}
-            100% {background-color:rgba(150, 150, 150,0.7);}
+        animation: border-color 5s 3;
+        @keyframes border-color {
+            0% {border-color:rgba(0, 0, 0, 0.8);}
+            100% {border-color:rgba(0, 0, 0, 0);}
         }
         background-color:rgba(150, 150, 150,0.7);
         border-radius:5px;
@@ -288,11 +288,17 @@ form{
             display:inline-block;
             & #menu{display:block;}
         }
+      
+       
         
     }
-    &.textfield{
-        display:none;
+    .ctrl_tggl{
+       
+        @include mobile{
+            display:none;
+        }
     }
+   
     // .key{ //<-- for graybreak
     //     //display:none;
     //     @include mobile{

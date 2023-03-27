@@ -291,11 +291,11 @@ form button {
 .keyboard .key, .keyboard .keytext {
   display: block;
   font-weight: bold;
-  min-width: 2em;
+  width: 2em;
   height: 2em;
   color: rgba(255, 255, 255, 0.8);
   /*animate background color for 10 seconds after page loads*/
-  animation: background-color 5s 3;
+  animation: border-color 5s 3;
   background-color: rgba(150, 150, 150, 0.7);
   border-radius: 5px;
   margin: 0.2em;
@@ -304,15 +304,15 @@ form button {
   font-size: larger;
   cursor: pointer;
 }
-@keyframes background-color {
+.keyboard .key.textfield, .keyboard .keytext.textfield {
+  display: inline-block;
+}
+@keyframes border-color {
   0% {
-    background-color: rgba(150, 150, 150, 0.7);
-  }
-  50% {
-    background-color: rgba(100, 100, 100, 0.8);
+    border-color: rgba(0, 0, 0, 0.8);
   }
   100% {
-    background-color: rgba(150, 150, 150, 0.7);
+    border-color: rgba(0, 0, 0, 0);
   }
 }
 .keyboard .key.active, .keyboard .keytext.active {
@@ -329,8 +329,10 @@ form button {
     display: block;
   }
 }
-.keyboard.textfield {
-  display: none;
+@media only screen and (max-width: 600px) {
+  .keyboard .ctrl_tggl {
+    display: none;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

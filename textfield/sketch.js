@@ -141,28 +141,42 @@ window.addEventListener('click', function (e) {
   //if mobile, toggle looping
   if (!mobile) {
     if (m.germ) {
-      m = m.germ;
+      //m.delete();
+      //if(mobile){
+      m = new prismCluster(m.germ, random(3, 6));
+      m.background();
+      m.drawRandomThrees(); //draw random threes
+      // } else {
+      //   m.delete();
+      //   m = m.germ.copyTranslated(createVector(0, 0));
+      //   placePrism(m);
+      // }
+
+    } else {
+     // m.delete(); 
+      m = m.copyTranslated(createVector(0, 0));
+      placePrism(m);
     }
-    m = m.copyTranslated(createVector(0, 0));
-    placePrism(m);
+   
+
   }
 
 
 });
 
-function mousePressed() {
-  if (mobile) {
-    if(document.getElementById('instructions').style.display != 'block'){
-      if (isLooping()) {
-        looping = false;
-        noLoop();
-      } else {
-        loop();
-        looping = true;
-      }
-  }
-}
-}
+// function mousePressed() {
+//   if (mobile) {
+//     if(document.getElementById('instructions').style.display != 'block'){
+//       if (isLooping()) {
+//         looping = false;
+//         noLoop();
+//       } else {
+//         loop();
+//         looping = true;
+//       }
+//   }
+// }
+// }
 
 //key functions
 let keyFunctions = {
@@ -230,7 +244,7 @@ let keyFunctions = {
   'f': {
     fnctn: function () {
       //m.group.hide();
-      if (!m.germ) {
+      if (this.bool == false) {
         let l = m;
         m = new prismCluster(l, random(3, 6));
         l.delete(); //delete germ
@@ -241,8 +255,9 @@ let keyFunctions = {
       }
       else {
           let l = m.germ; 
-          m.delete();
-          m = placePrism(l.germ);
+          m.delete(); 
+          m = l.copyTranslated(createVector(0, 0));
+          
           this.bool = false;
        
       }
@@ -268,13 +283,9 @@ let keyFunctions = {
       
       this.stage = (this.stage + 1) % stages.length;
       let stage = stages[this.stage];
-      if (stage.bg == 'image') {
-        cvs_bg.hide();
-      } else {
-        cvs_bg.show();
-        cvs_bg.fill(stage.bg);
-
-      }
+     cvs_bg.fill(stage.bg);
+      //cvs_bg.animate().attr({ fill: stage.bg });
+      
       //m.delete();
       m.updateStroke(stage.stroke);
       m.updateBackfill(stage.fill);
@@ -317,6 +328,8 @@ function keyPressed() {
 
   }
 }
+
+
 
 
 function placePrism(p = false, stroke = strk, fill = fll) {
