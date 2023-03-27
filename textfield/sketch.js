@@ -61,7 +61,7 @@ function setup() {
 
   //place initial prism 
   m = placePrism(); //new prism
- 
+
   //if mobile
   if (navigator.userAgent.match(/Android/i)
     || navigator.userAgent.match(/webOS/i)
@@ -75,7 +75,7 @@ function setup() {
 
   cvs_bg.attr('filter', 'grayscale(1)')
   if (mobile) {
-    
+
     let dim = m.getDim();
     m.group.move(cvs_width / 2 - dim.x / 2, cvs_height / 2 - dim.y / 2)
     frameRate(1);
@@ -89,7 +89,7 @@ function setup() {
       function () {
         let l = new prismCluster(m, random(2, 5));
         m.delete();
-        m = l; 
+        m = l;
         m.background(); //draw background
         m.bg.opacity(0.5);
         m.drawRandomThrees(); //draw random threes
@@ -139,25 +139,26 @@ function draw() {
 
 window.addEventListener('click', function (e) {
   //if mobile, toggle looping
-  if (!mobile) {
-    if (m.germ) {
-      //m.delete();
-      //if(mobile){
-      m = new prismCluster(m.germ, random(3, 6));
-      m.background();
-      m.drawRandomThrees(); //draw random threes
-      // } else {
-      //   m.delete();
-      //   m = m.germ.copyTranslated(createVector(0, 0));
-      //   placePrism(m);
-      // }
+  if (windowWidth > 700 | mouseY > 50) {
+    if (!mobile) {
+      if (m.germ) {
+        //m.delete();
+        //if(mobile){
+        m = new prismCluster(m.germ, random(3, 6));
+        m.background();
+        m.drawRandomThrees(); //draw random threes
+        // } else {
+        //   m.delete();
+        //   m = m.germ.copyTranslated(createVector(0, 0));
+        //   placePrism(m);
+        // }
 
-    } else {
-     // m.delete(); 
-      m = m.copyTranslated(createVector(0, 0));
-      placePrism(m);
+      } else {
+        // m.delete(); 
+        m = m.copyTranslated(createVector(0, 0));
+        placePrism(m);
+      }
     }
-   
 
   }
 
@@ -254,12 +255,12 @@ let keyFunctions = {
         this.bool = true;
       }
       else {
-          let l = m.germ; 
-          m.delete(); 
-          m = l.copyTranslated(createVector(0, 0));
-          
-          this.bool = false;
-       
+        let l = m.germ;
+        m.delete();
+        m = l.copyTranslated(createVector(0, 0));
+
+        this.bool = false;
+
       }
       // m.background();
       // m.drawRandomThrees();
@@ -280,12 +281,12 @@ let keyFunctions = {
       { bg: bg_pattern, stroke: 'black', fill: 'white' },
       { bg: bg_pattern, stroke: 'white', fill: 'black' },
       ];
-      
+
       this.stage = (this.stage + 1) % stages.length;
       let stage = stages[this.stage];
-     cvs_bg.fill(stage.bg);
+      cvs_bg.fill(stage.bg);
       //cvs_bg.animate().attr({ fill: stage.bg });
-      
+
       //m.delete();
       m.updateStroke(stage.stroke);
       m.updateBackfill(stage.fill);
@@ -344,7 +345,7 @@ function placePrism(p = false, stroke = strk, fill = fll) {
       p.genFacets();
     }
     p.preload();
-  } 
+  }
 
   // p.drawAll();
   // p.background();
