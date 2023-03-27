@@ -139,7 +139,7 @@ function draw() {
 
 window.addEventListener('click', function (e) {
   //if mobile, toggle looping
-  if (windowWidth > 700 | mouseY > 50) {
+  if (mouseY > 50) {
     if (!mobile) {
       if (m.germ) {
         //m.delete();
