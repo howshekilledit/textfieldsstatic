@@ -108,6 +108,8 @@ function setup() {
       }
     ]
   }
+  m.group.move(cvs_width / 2 - dim.x / 2, cvs_height / 2 - dim.y / 2);
+
 }
 
 function draw() {
