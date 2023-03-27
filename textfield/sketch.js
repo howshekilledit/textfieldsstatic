@@ -126,7 +126,11 @@ function draw() {
       dim = m.getDim();
       m.group.move(cvs_width / 2 - dim.x / 2, cvs_height / 2 - dim.y / 2);
     } else {
-      m.group.move(mouseX - dim.x / 2, mouseY - dim.y / 2);
+      if(mouseX > 0 && mouseX < cvs_width && mouseY > 0 && mouseY < cvs_height){
+        m.group.move(mouseX - dim.x / 2, mouseY - dim.y / 2);
+      } else {
+        m.group.move(cvs_width / 2 - dim.x / 2, cvs_height / 2 - dim.y / 2);
+      }
     }
     // if (prism_cluster) {
     //   prism_cluster.group.move(mouseX - dim.x / 2, mouseY - dim.y / 2);
