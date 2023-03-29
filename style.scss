@@ -1,14 +1,14 @@
-$main_font:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+$main_font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
 //mobile mixin
-@mixin mobile{
-    @media only screen and (max-width: 600px){
+@mixin mobile {
+    @media only screen and (max-width: 600px) {
         @content;
     }
 }
 
 //parent class mixin
-@mixin parent($parent){
+@mixin parent($parent) {
     @at-root #{&} {
         @at-root #{&}#{$parent} {
             @content;
@@ -18,287 +18,431 @@ $main_font:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
 /*EVERY WORD */
 /*see everyword.html for server side styles*/
-#poem{
+#poem {
     font-family: 'Courier New', Courier, monospace;
     text-align: justify;
     text-justify: inter-word;
-    position:absolute !important;
-    max-width:80%; 
-    font-weight:bold;
+    position: absolute !important;
+    max-width: 80%;
+    font-weight: bold;
     color: #000;
-    z-index:3;
-    @include mobile{
-        top:5em !important;
-        left:15% !important;
-    };
+    z-index: 3;
+
+    @include mobile {
+        top: 5em !important;
+        left: 15% !important;
+    }
+
+    ;
 }
 
-.background{
+.background {
     font-family: 'Courier New', Courier, monospace;
-    color:#bdbdbd;
+    color: #bdbdbd;
     background: #D3D3D3;
     /* drop shadow */
     text-shadow: 0 0 0.5em #a8a8a8;
     text-align: justify;
-    z-index:0;
-    -moz-transform:    scaleX(-1); /* Gecko */
-    -o-transform:      scaleX(-1); /* Opera */
-    -webkit-transform: scaleX(-1); /* Webkit */
-    transform:         scaleX(-1); /* Standard */
+    z-index: 0;
+    -moz-transform: scaleX(-1);
+    /* Gecko */
+    -o-transform: scaleX(-1);
+    /* Opera */
+    -webkit-transform: scaleX(-1);
+    /* Webkit */
+    transform: scaleX(-1);
+    /* Standard */
 
-    filter: FlipH;                 /* IE 6/7/8 */
+    filter: FlipH;
+    /* IE 6/7/8 */
 
 
 }
-#poemshadow{
+
+#poemshadow {
     font-family: 'Courier New', Courier, monospace;
-    position:absolute;
+    position: absolute;
     text-align: justify;
     text-justify: inter-word;
     z-index: 1;
-    overflow:hidden;
-}
-#poemshadow .choose{color:darkgrey;}
-.glow{
-    font-size:20px;
-    cursor:pointer;
-}
-.everyword{
-    overflow:hidden;
-    #menu{a {color:black}}
+    overflow: hidden;
 }
 
-body{margin:0; padding:0; &.noscroll{overflow:hidden;}}
-.graybreak{
-    width:100vw;
-        height:100vh;
-        overflow:hidden;
+#poemshadow .choose {
+    color: darkgrey;
+}
+
+.glow {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.everyword {
+    overflow: hidden;
+
+    #menu {
+        a {
+            color: black
+        }
+    }
+}
+
+body {
+    margin: 0;
+    padding: 0;
+
+    &.noscroll {
+        overflow: hidden;
+    }
+}
+
+.graybreak {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
     margin: auto;
-    canvas{display:none}
-    #menu{position:absolute; z-index:2;}
-    #bg{position:absolute; top:0;  z-index:0; width:100%; height:auto; filter:grayscale(1)}
 
-    svg{position:absolute; top:0; z-index:1;  }
+    canvas {
+        display: none
+    }
+
+    #menu {
+        position: absolute;
+        z-index: 2;
+    }
+
+    #bg {
+        position: absolute;
+        top: 0;
+        z-index: 0;
+        width: 100%;
+        height: auto;
+        filter: grayscale(1)
+    }
+
+    svg {
+        position: absolute;
+        top: 0;
+        z-index: 1;
+    }
 
 }
-#instructions{
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background-color:rgba(0,0,0,0.7);
-    z-index:5;
-    display:none;
-    color:white;
 
-     #instructions-text{
-        font-size:large;
-        position:absolute;
-        top:50%;
-        left:50%;
-        transform:translate(-50%,-50%);
-        width:70%;
-        height:70%;
-        background-color:rgba(0, 0, 0, 1);
-        font-family:$main_font;
-        z-index:4;
-        padding:2em;
+#instructions {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 5;
+    display: none;
+    color: white;
+
+    #instructions-text {
+        font-size: large;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 70%;
+        height: 70%;
+        background-color: rgba(0, 0, 0, 1);
+        font-family: $main_font;
+        z-index: 4;
+        padding: 2em;
 
     }
-    #instructions_close{
-        position:absolute;
-        top:1em;
-        right:1em;
-        cursor:pointer;
+
+    #instructions_close {
+        position: absolute;
+        top: 1em;
+        right: 1em;
+        cursor: pointer;
     }
-    a{
+
+    a {
         /*glowing color*/
-        color:yellow;
+        color: yellow;
         /*glowing color*/
         //text-shadow: 0 0 5px rgb(255, 255, 255), 0 0 10px rgb(255, 255, 255), 0 0 15px rgb(255, 255, 255), 0 0 20px rgb(255, 255, 255), 0 0 25px rgb(255, 255, 255), 0 0 30px rgb(255, 255, 255), 0 0 35px rgb(255, 255, 255);
-        font-weight:bold;
-        text-decoration:none;
+        font-weight: bold;
+        text-decoration: none;
     }
-    #listen{
-        font-style:italic;
-        cursor:pointer;
+
+    #listen {
+        font-style: italic;
+        cursor: pointer;
     }
 }
 
-.textpage{
-    font-family:$main_font;
-    font-size:large;
-    width:80%;
-    margin:5% auto;
+.textpage {
+    font-family: $main_font;
+    font-size: large;
+    width: 80%;
+    margin: 5% auto;
 
 }
 
-.gallery{h2{margin-top: 1.1em;}}
-ul.hori{
-    &.works{font-size:larger}
+.gallery {
+    h2 {
+        margin-top: 1.1em;
+    }
+}
+
+ul.hori {
+    &.works {
+        font-size: larger
+    }
+
     display:flex;
     flex-wrap:wrap;
     //justify-content:space-around;
     justify-content: space-between;
     margin:0;
     padding:0;
-    li{
-        list-style:none;
-        margin:0;
-        padding:0;
-        margin-bottom:1em;
-        img{
-            width:100%;
-            height:auto;
-            cursor:pointer;
+
+    li {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        margin-bottom: 1em;
+
+        img {
+            width: 100%;
+            height: auto;
+            cursor: pointer;
         }
     }
 }
 
 
-#menu{
-    width:150px;
+#menu {
+    width: 150px;
     font-size: medium;
 
-    height:1em;
-    position:absolute;
-    font-family:$main_font;
+    height: 1em;
+    position: absolute;
+    font-family: $main_font;
     right: 1em;
-    top:0;
-    z-index:2;
-    text-align:right;
-    ul{display:inline; margin:0}
-    li{
-        list-style:none;
-        display:none; //hide menu items
-        &.show{display:block;} //show menu items
-        &.inline{display:inline;}
+    top: 0;
+    z-index: 2;
+    text-align: right;
+
+    ul {
+        display: inline;
+        margin: 0
+    }
+
+    li {
+        list-style: none;
+        display: none; //hide menu items
+
+        &.show {
+            display: block;
+        }
+
+        //show menu items
+        &.inline {
+            display: inline;
+        }
+
         margin:0;
         padding:0;
         //margin-bottom:1em;
     }
-    ul.compressed{li{margin:0}}
-    #menu-toggle{cursor:pointer}
+
+    ul.compressed {
+        li {
+            margin: 0
+        }
+    }
+
+    #menu-toggle {
+        cursor: pointer
+    }
+
 }
 
-.medusa{
+.textfield {
+    #menu {
+        @include mobile {
+            visibility: hidden;
+        }
+    }
+}
+
+
+.medusa {
     background-color: black;
     transition-property: background-color;
     transition-duration: 3s;
-    a{color:white}
-    canvas{display:none}
-    #instructions-text{border:1px white solid}
-    svg{
+
+    a {
+        color: white
+    }
+
+    canvas {
+        display: none
+    }
+
+    #instructions-text {
+        border: 1px white solid
+    }
+
+    svg {
         display: block;
-        position:absolute;
+        position: absolute;
         /*border: 1px solid red;*/
-        top:0;
-        left:0;
-        padding:0;
-        margin:0;
+        top: 0;
+        left: 0;
+        padding: 0;
+        margin: 0;
 
-      }
-}
-form{
-    font-family:$main_font;
-    ul{margin:0;}
-    label{font-weight:bolder; }
-    input{
-    
-        font-family:$main_font;
-        padding:0.5em;
-        border:1px solid black;
-        border-radius:5px;
-        margin:0.5em;
-    }
-    
-    button{
-        font-size:large;
-        font-family:$main_font;
-        padding:0.5em;
-        border:1px solid black;
-        border-radius:5px;
-        margin:0.5em;
-        cursor:pointer;
-    }
-}
-#cookieNotice{
-    position:fixed;
-    font-family:$main_font;
-    bottom:0;
-    left:0;
-    width:80%;
- 
-    padding: 2em 10%;
-    background-color:rgba(0, 0, 0, 0.8);
-    color:white;
-    z-index:5;
-    //rounded button with black text on white
-    button{
-        background-color:rgba(0, 0, 0, 0.9);
-        color:white;
-        font-size:large;
-        border:1px solid white;
-        border-radius:5px;
-        padding:0.5em;
-        
-        cursor:pointer;
-    }
-    a{
-        color:yellow;
-        text-decoration:none;
     }
 }
 
-.keyboard{
-   // display:none;
+form {
     font-family: $main_font;
-    position:absolute;
-    left:1em;
-    top:1em;
-        // left:50%;
-        // transform:translate(-50%, 0%);
-        z-index:5; 
-    .key, .keytext{
-        display:block;
-        &.textfield {display:inline-block;}
+
+    ul {
+        margin: 0;
+    }
+
+    label {
+        font-weight: bolder;
+    }
+
+    input {
+
+        font-family: $main_font;
+        padding: 0.5em;
+        border: 1px solid black;
+        border-radius: 5px;
+        margin: 0.5em;
+    }
+
+    button {
+        font-size: large;
+        font-family: $main_font;
+        padding: 0.5em;
+        border: 1px solid black;
+        border-radius: 5px;
+        margin: 0.5em;
+        cursor: pointer;
+    }
+}
+
+#cookieNotice {
+    position: fixed;
+    font-family: $main_font;
+    bottom: 0;
+    left: 0;
+    width: 80%;
+
+    padding: 2em 10%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    z-index: 5;
+
+    //rounded button with black text on white
+    button {
+        background-color: rgba(0, 0, 0, 0.9);
+        color: white;
+        font-size: large;
+        border: 1px solid white;
+        border-radius: 5px;
+        padding: 0.5em;
+
+        cursor: pointer;
+    }
+
+    a {
+        color: yellow;
+        text-decoration: none;
+    }
+}
+
+.keyboard {
+    // display:none;
+    font-family: $main_font;
+    position: absolute;
+    left: 1em;
+    top: 1em;
+    &.arrows{
+        display:none;
+        @include mobile {
+            display:block;
+            bottom:1em; 
+            top: auto;
+        }
+    }
+    // left:50%;
+    // transform:translate(-50%, 0%);
+    z-index: 2;
+
+    .key,
+    .keytext {
+        display: block;
+
+        &.textfield {
+            display: inline-block;
+        }
+
         font-weight:bold;
         width:2em;
         height:2em;
         //border:1px solid black;
-        color: rgba(255, 255, 255,0.8);
+        color: rgba(255, 255, 255, 0.8);
         //transluscent black fill
         /*animate background color for 10 seconds after page loads*/
         animation: border-color 5s 3;
+
         @keyframes border-color {
-            0% {border-color:rgba(0, 0, 0, 0.8);}
-            100% {border-color:rgba(0, 0, 0, 0);}
+            0% {
+                border-color: rgba(0, 0, 0, 0.8);
+            }
+
+            100% {
+                border-color: rgba(0, 0, 0, 0);
+            }
         }
-        background-color:rgba(150, 150, 150,0.7);
+
+        background-color:rgba(150, 150, 150, 0.7);
         border-radius:5px;
         margin:0.2em;
         text-align:center;
         line-height:2em;
         font-size:larger;
         cursor:pointer;
-        &.active{background-color:yellow}
-        &:hover{background-color:navy}
-        @include mobile{
-            display:inline-block;
-            & #menu{display:block;}
+
+        &.active {
+            background-color: yellow
         }
-      
-       
-        
+
+        &:hover {
+            background-color: navy
+        }
+
+        @include mobile {
+            display: inline-block;
+
+            & #menu {
+                display: block;
+            }
+        }
+
+
+
     }
-    .ctrl_tggl{
-       
-        @include mobile{
-            display:none;
+
+    .ctrl_tggl {
+
+        @include mobile {
+            display: none;
         }
     }
-   
+
     // .key{ //<-- for graybreak
     //     //display:none;
     //     @include mobile{
@@ -311,6 +455,5 @@ form{
     //         //display:none;;
     //     }
     // }
-   
-}
 
+}

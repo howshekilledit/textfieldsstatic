@@ -206,6 +206,12 @@ ul.hori li img {
   cursor: pointer;
 }
 
+@media only screen and (max-width: 600px) {
+  .textfield #menu {
+    visibility: hidden;
+  }
+}
+
 .medusa {
   background-color: black;
   transition-property: background-color;
@@ -286,9 +292,20 @@ form button {
   position: absolute;
   left: 1em;
   top: 1em;
-  z-index: 5;
+  z-index: 2;
 }
-.keyboard .key, .keyboard .keytext {
+.keyboard.arrows {
+  display: none;
+}
+@media only screen and (max-width: 600px) {
+  .keyboard.arrows {
+    display: block;
+    bottom: 1em;
+    top: auto;
+  }
+}
+.keyboard .key,
+.keyboard .keytext {
   display: block;
   font-weight: bold;
   width: 2em;
@@ -304,7 +321,8 @@ form button {
   font-size: larger;
   cursor: pointer;
 }
-.keyboard .key.textfield, .keyboard .keytext.textfield {
+.keyboard .key.textfield,
+.keyboard .keytext.textfield {
   display: inline-block;
 }
 @keyframes border-color {
@@ -315,17 +333,21 @@ form button {
     border-color: rgba(0, 0, 0, 0);
   }
 }
-.keyboard .key.active, .keyboard .keytext.active {
+.keyboard .key.active,
+.keyboard .keytext.active {
   background-color: yellow;
 }
-.keyboard .key:hover, .keyboard .keytext:hover {
+.keyboard .key:hover,
+.keyboard .keytext:hover {
   background-color: navy;
 }
 @media only screen and (max-width: 600px) {
-  .keyboard .key, .keyboard .keytext {
+  .keyboard .key,
+.keyboard .keytext {
     display: inline-block;
   }
-  .keyboard .key #menu, .keyboard .keytext #menu {
+  .keyboard .key #menu,
+.keyboard .keytext #menu {
     display: block;
   }
 }
