@@ -106,6 +106,17 @@ body {
         display: none
     }
 
+    #loading{
+        z-index: 3;
+        //very center of screen, large text
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 3em;
+        font-family: $main_font;
+    }
+
     #menu {
         position: absolute;
         z-index: 2;

@@ -79,6 +79,15 @@ body.noscroll {
 .graybreak canvas {
   display: none;
 }
+.graybreak #loading {
+  z-index: 3;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3em;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
 .graybreak #menu {
   position: absolute;
   z-index: 2;
