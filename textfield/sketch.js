@@ -16,7 +16,6 @@ let bg_img; //background image
 let img_pattern;
 let bg_pattern; //background pattern
 let m_crd; //mobile coordinates 
-let ldng; //loading screen
 
 function preload() {
   l_img = loadImage(l_img_file);
@@ -30,7 +29,6 @@ function setup() {
   cvs = SVG().addTo('main').size(cvs_width, cvs_height).attr({ background: random(colors), overflow: 'hidden' });
   cvs_bg = cvs.rect(cvs_width, cvs_height).fill('#fff');
   //put ldng text in center
-  ldng = cvs.text('loading...').font({ family: 'Helvetica', size: 20, anchor: 'middle' }).move(cvs_width / 2, cvs_height / 2);
   document.getElementsByTagName('main')[0].style.width = cvs_width + 'px';
   document.getElementsByTagName('main')[0].style.height = cvs_height + 'px';
 
@@ -93,8 +91,10 @@ function setup() {
 }
 
 function draw() {
-  if(frameCount == 1){
-    ldng.remove(); //remove loading text
+  let loading = document.getElementById('loading');
+  if(loading.style.display != 'none'){
+    loading.style.display = 'none';
+
 
   }
   if (looping) {
