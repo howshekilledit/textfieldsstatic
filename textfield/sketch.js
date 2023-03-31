@@ -165,9 +165,16 @@ let keyFunctions = {
           for (let l of m.lines) {
             l.show();
           }
-        } else {
-          m.line_index = floor(random(m.lines.length));
-          m.lines[m.line_index].show();
+        } else { //flip coin to show random linegroup or back/front
+          let coin = floor(random(2));
+          if (coin == 0) { //random
+            m.line_index = floor(random(m.lines.length));
+            m.lines[m.line_index].show();
+          } else { //front/back
+            m.lines[0].show();
+            m.lines[m.lines.length - 1].show();
+            m.line_index = [0, m.lines.length-1]; //set current line group index to front/back
+          }
         }
         this.bool = true;
       }

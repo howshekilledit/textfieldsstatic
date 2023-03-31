@@ -16,8 +16,9 @@ let prism = class {
   }
   preload() {
     this.lines = []; //create array of groups that will hold lines
-    this.drawAll(); //draw all facets in one layer at lines[0]
-    this.line_index = 0; //set current line group index to 0
+    let front_back = this.frontFacets(); //get array of front and back groups of lines
+    front_back[0].drawAll(this.group, 'none', this.stroke);
+    this.lines.push(front_back[0].lines[0]); //add the group to the lines array
     let alt_lines = this.threeFacets().concat(this.frontFacets()); //get array of random groups + front and back groups of lines
     //create a transluscent layer stack with initial opacity of 0
     this.stackFull(floor(random(6)), random(this.colors), random(this.colors), 0.02, this.group, false);
@@ -29,7 +30,9 @@ let prism = class {
       }
       this.lines.push(linegroup.lines[0]); //add the group to the lines array
     }
-
+    front_back[1].drawAll(this.group, 'none', this.stroke);
+    this.lines.push(front_back[1].lines[0]); //add the group to the lines array
+    this.line_index = [0, this.lines.length-1]; //set current line group index to 0
     this.background(); //draw background + create this.bg
     this.bg.opacity(0);
   }
@@ -277,8 +280,17 @@ let prism = class {
       if(this.lines){
         //get visibility of lines
         copied.lines.map(l => l.hide());
-        if(this.lines[this.line_index].visible()){
-          copied.lines[this.line_index].show();
+        //if line index is array
+        if(Array.isArray(this.line_index)){
+          for(let i of this.line_index){
+            if(this.lines[i].visible()){
+              copied.lines[i].show();
+            }
+          }
+        }else{ //if line index is number
+          if(this.lines[this.line_index].visible()){
+            copied.lines[this.line_index].show();
+          }
         }
       }
       if(this.stack){
