@@ -31,6 +31,7 @@ let prism = class {
     }
 
     this.background(); //draw background + create this.bg
+    this.bg.opacity(0);
   }
   updateStroke(stroke) {
     this.stroke = stroke;
