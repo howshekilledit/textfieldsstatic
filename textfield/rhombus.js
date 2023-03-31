@@ -820,7 +820,9 @@ class prismCluster {
         this.prisms.push(germPrism.copyTranslated(createVector(random(-100, 100), random(-100, 100)), false));
       } else {
         let offset = this.germ.byType().base[0].getDim();
-        this.prisms.push(germPrism.copyTranslated(createVector(offset.x * floor(i / 2), offset.y * ceil(i / 2)), false));
+        let transvect = createVector(offset.x * floor(i / 2), offset.y * ceil(i / 2));
+        this.prisms.push(germPrism.copyTranslated(transvect, false));
+      
 
       }
     }

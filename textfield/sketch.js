@@ -58,6 +58,8 @@ function setup() {
   bg_pattern = cvs.pattern(image_dim.x, image_dim.y, function (add) {
     add.image(img_file, 0, 0, image_dim.x, image_dim.y);
   });
+  //create circle and clip with pattern
+  
 
   //place initial prism 
   m = placePrism(); //new prism
@@ -242,12 +244,15 @@ let keyFunctions = {
       //maybe: https://stackoverflow.com/questions/3796025/fill-svg-path-element-with-a-background-image
       let stages = [{ bg: 'white', stroke: 'black', fill: 'gray' },
       { bg: 'black', stroke: 'white', fill: 'gray' },
+      { bg: 'black', stroke: 'white', fill: img_pattern },
+      { bg: 'white', stroke: 'white', fill: img_pattern },
       { bg: bg_pattern, stroke: 'black', fill: 'white' },
       { bg: bg_pattern, stroke: 'white', fill: 'black' },
       ];
 
       this.stage = (this.stage + 1) % stages.length;
       let stage = stages[this.stage];
+     
       cvs_bg.fill(stage.bg);
       //cvs_bg.animate().attr({ fill: stage.bg });
 
@@ -256,6 +261,11 @@ let keyFunctions = {
       m.updateBackfill(stage.fill);
       strk = stage.stroke;
       fll = stage.fill;
+      if(stage.fill == img_pattern){
+        m.bg.opacity(1); //if image is background, make opaque
+        m.bg.attr('filter', 'grayscale(1);blur(5px)'); //blur background image
+
+      }
 
 
 
