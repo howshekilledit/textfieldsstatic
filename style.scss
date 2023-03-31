@@ -29,11 +29,10 @@ $main_font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     z-index: 3;
 
     @include mobile {
-        top: 5em !important;
-        left: 15% !important;
-    }
-
-    ;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    };
 }
 
 .background {
