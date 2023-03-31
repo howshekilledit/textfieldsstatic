@@ -76,13 +76,7 @@ function setup() {
   }
 
   cvs_bg.attr('filter', 'grayscale(1)')
-  if (mobile) {
-    if(instructions.style.visibility != 'hidden'){
-      instructions.style.visibility = 'hidden';
-    }
-    let dim = m.getDim();
-    
-  }
+  
   m.group.move(m_crd.x, m_crd.y);
 
 
