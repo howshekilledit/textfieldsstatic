@@ -379,11 +379,16 @@ form {
     position: absolute;
     left: 1em;
     top: 1em;
+    @include mobile {
+        left: 0.5em;
+        top: 0.5em;
+    }
     &.arrows{
         display:none;
         @include mobile {
             display:block;
-            bottom:1em; 
+            bottom:0.5em; 
+            left: 0.5em;
             top: auto;
         }
     }
@@ -421,6 +426,10 @@ form {
         background-color:rgba(150, 150, 150, 0.7);
         border-radius:5px;
         margin:0.2em;
+        @include mobile {
+            margin:0.03em;
+
+        }
         text-align:center;
         line-height:2em;
         font-size:larger;

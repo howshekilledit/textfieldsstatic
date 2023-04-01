@@ -7,7 +7,7 @@ let cvs_width;
 let cvs_height;
 let mobile = false;
 let mobile_options;
-let strk = '#000';
+let strk = '#000000';
 let fll = 'gray';
 let img;
 let l_img;
@@ -20,6 +20,165 @@ let m_crd; //mobile coordinates
 function preload() {
   l_img = loadImage(l_img_file);
   p_img = loadImage(p_img_file);
+}
+//key functions
+let keyFunctions = {
+  'a': {
+    fnctn: function (stage = (this.stage + 1)) {
+      //toggle background opaque, 50% invisible
+      let fills = ['gray', '#ffffff', '#000000', img_pattern];
+      stage = stage % fills.length;
+      m.bg.opacity(1);
+
+      let fll = fills[stage];
+      //if fill is canvas fill, advance one more
+      if (fll == cvs_bg.fill()) {
+        stage = (stage + 1) % fills.length;
+        fll = fills[stage];
+      }
+      m.updateBackfill(fll);
+      //if stroke equals fill, invert stroke
+      if (m.stroke == m.bg.fill()) {
+        if (m.stroke == '#000000') {
+          m.updateStroke('#ffffff');
+        } else {
+          m.updateStroke('#000000');
+        }
+      }
+
+      this.stage = stage; //update stage
+    }, desc: 'toggle background',
+    stage: 0
+  },
+  's': {
+    fnctn: function () {
+      //toggle background opaque, 50% invisible
+      if (m.bg.opacity() == 1) {
+        m.bg.opacity(0.5);
+      } else {
+        if (m.bg.opacity() == 0.5) {
+          m.bg.opacity(0);
+        } else {
+          m.bg.opacity(1);
+        }
+      }
+    }, desc: 'toggle background',
+    bool: false
+  },
+  'd': {
+    fnctn: function () {
+      if (this.bool) { //if lines are visible
+        for (let l of m.lines) {
+          l.hide();
+        }
+        this.bool = false;
+      } else { //if lines are invisible
+        if (m.germ) { //check if cluster
+          for (let l of m.lines) {
+            l.show();
+          }
+        } else { //flip coin to show random linegroup or back/front
+          let coin = floor(random(2));
+          if (coin == 0) { //random
+            m.line_index = floor(random(m.lines.length));
+            m.lines[m.line_index].show();
+          } else { //front/back
+            m.lines[0].show();
+            m.lines[m.lines.length - 1].show();
+            m.line_index = [0, m.lines.length - 1]; //set current line group index to front/back
+          }
+        }
+        this.bool = true;
+      }
+    }, desc: 'toggle line visibility/line group',
+    bool: true
+  },
+  // 's': {fnctn: function () {
+  //   m.delete();
+  //   m.stackFull(0, m.c1, m.c2, 0.5);
+  // }, desc: 'solid gradient stack prism',
+  // bool: false},
+  'f': {
+    fnctn: function () {
+      //toggle background opaque, 50% invisible
+      if (m.germ) { //if cluster move stack forward to visible
+        m.stack.front();
+      }
+      if (m.stack.opacity() == 1) {
+        m.stack.opacity(0.5);
+      } else {
+        if (m.stack.opacity() == 0.5) {
+          m.stack.opacity(0);
+        } else {
+          m.stack.opacity(1);
+        }
+      }
+    }, desc: 'toggle stack',
+    bool: false
+  },
+  //cluster should inherit properties of germ and toggle
+  'g': {
+    fnctn: function () {
+      //m.group.hide();
+      if (!m.germ) {
+        let l = m;
+        m = new prismCluster(l, random(3, 6));
+        l.delete(); //delete germ
+        m.background();
+        m.drawRandomThrees(); //draw random threes
+        m.germ.bg.opacity(m.bg.opacity());
+        m.germ.bg.fill(m.bg.fill());
+
+        this.bool = true;
+      }
+      else {
+        let l = m.germ;
+        m.delete();
+        m = l.copyTranslated(createVector(0, 0));
+
+        this.bool = false;
+
+      }
+      // m.background();
+      // m.drawRandomThrees();
+    }, desc: 'draw cluster with random threes, creating broken geometry',
+    bool: false
+  },
+
+
+  'h': {
+    fnctn: function () { //change background
+      // let img_pattern = `<pattern id="img1" patternUnits="userSpaceOnUse" width="${cvs_width}" height="${cvs_height}">
+      // <image href="${folder+img_file}" x="0" y="0" width="${cvs_width}" height="auto" />
+      // </pattern>`;
+      //let img_path = img_file;
+      //maybe: https://stackoverflow.com/questions/3796025/fill-svg-path-element-with-a-background-image
+      let stages = [{ bg: '#ffffff', stroke: '#000000' },
+      { bg: '#000000', stroke: '#ffffff' },
+      { bg: bg_pattern, stroke: '#000000' },
+      { bg: bg_pattern, stroke: '#ffffff' },
+      ];
+
+      this.stage = (this.stage + 1) % stages.length;
+      let stage = stages[this.stage];
+      document.getElementById('info').style.color = stage.stroke;
+
+      cvs_bg.fill(stage.bg);
+
+      m.updateStroke(stage.stroke);
+    }, desc: 'change canvas background',
+    stage: 0
+  },
+  'i': {
+    fnctn: function () {
+      // if(m.bg.opacity() == 0){m.bg.opacity(1);}
+      // m.toggleMask();
+      m.delete();
+      m = placePrism();
+    }, desc: 'change current prism for new',
+    bool: false
+  },
+
 }
 
 function setup() {
@@ -59,7 +218,7 @@ function setup() {
     add.image(img_file, 0, 0, image_dim.x, image_dim.y);
   });
   //create circle and clip with pattern
-  
+
 
   //place initial prism 
   m = placePrism(); //new prism
@@ -78,23 +237,34 @@ function setup() {
   }
 
   cvs_bg.attr('filter', 'grayscale(1)')
-  
+
   m.group.move(m_crd.x, m_crd.y);
-
-
+  let initial_states = [
+    function () { //sets prism bg to image and hides stroke
+      keyFunctions['a'].fnctn(3);
+      keyFunctions['d'].fnctn();
+    },
+    function () { //shows rainbowstaack
+      keyFunctions['f'].fnctn();
+    },
+    function () { //creates cluster
+      keyFunctions['g'].fnctn();
+    }
+  ]; //array of possible functions to call on initial load
+  random(initial_states)(); //call random function from array
 
 
 }
 
 function draw() {
   let loading = document.getElementById('loading');
-  if(loading.style.display != 'none'){
+  if (loading.style.display != 'none') {
     loading.style.display = 'none';
 
 
   }
   if (looping) {
- 
+
     //m.group.facets[0].polygon.move(mouseX, mouseY);
 
     let dim = m.getDim();
@@ -102,7 +272,7 @@ function draw() {
     if (mobile) {
       m.group.move(m_crd.x, m_crd.y);
     } else {
-      if(mouseX > 0 && mouseX < cvs_width && mouseY > 0 && mouseY < cvs_height){
+      if (mouseX > 0 && mouseX < cvs_width && mouseY > 0 && mouseY < cvs_height) {
         m.group.move(mouseX - dim.x / 2, mouseY - dim.y / 2);
       } else {
         m.group.move(m_crd.x, m_crd.y);
@@ -120,17 +290,17 @@ function draw() {
 //on cvs click
 
 window.addEventListener('click', function (e) {
+  let o = false; 
   if ((mouseY > 80 || mouseX > 400) & !mobile) { //if not in button area and on PC
-      if (m.germ) {
-        m = new prismCluster(m.germ, random(3, 6));
-        m.background();
-        m.drawRandomThrees(); //draw random threes
-      } else {
-        // m.delete(); 
-        m = m.copyTranslated(createVector(0, 0));
-        placePrism(m);
-      }
-    
+    if (m.germ) {
+      o = m.bg.opacity(); //save opacity
+      m = m.germ.copyTranslated(createVector(0, 0));
+    } else {
+      m = m.copyTranslated(createVector(0, 0));
+    }
+  
+
+
 
   }
 
@@ -138,162 +308,6 @@ window.addEventListener('click', function (e) {
 });
 
 
-//key functions
-let keyFunctions = {
-  'a': {
-    fnctn: function () {
-      //toggle background opaque, 50% invisible
-      if (m.bg.opacity() == 1) {
-        m.bg.opacity(0.5);
-      } else {
-        if (m.bg.opacity() == 0.5) {
-          m.bg.opacity(0);
-        } else {
-          m.bg.opacity(1);
-        }
-      }
-    }, desc: 'toggle background',
-    bool: false
-  },
-  's': {
-    fnctn: function () {
-      if (this.bool) { //if lines are visible
-        for (let l of m.lines) {
-          l.hide();
-        }
-        this.bool = false;
-      } else { //if lines are invisible
-        if (m.germ) { //check if cluster
-          for (let l of m.lines) {
-            l.show();
-          }
-        } else { //flip coin to show random linegroup or back/front
-          let coin = floor(random(2));
-          if (coin == 0) { //random
-            m.line_index = floor(random(m.lines.length));
-            m.lines[m.line_index].show();
-          } else { //front/back
-            m.lines[0].show();
-            m.lines[m.lines.length - 1].show();
-            m.line_index = [0, m.lines.length-1]; //set current line group index to front/back
-          }
-        }
-        this.bool = true;
-      }
-
-    }, desc: 'toggle line visibility/line group',
-    bool: true
-  },
-  // 's': {fnctn: function () {
-  //   m.delete();
-  //   m.stackFull(0, m.c1, m.c2, 0.5);
-  // }, desc: 'solid gradient stack prism',
-  // bool: false},
-  'd': {
-    fnctn: function () {
-      //toggle background opaque, 50% invisible
-      if (m.germ) { //if cluster move stack forward to visible
-        m.stack.front();
-      }
-      if (m.stack.opacity() == 1) {
-        m.stack.opacity(0.5);
-      } else {
-        if (m.stack.opacity() == 0.5) {
-          m.stack.opacity(0);
-        } else {
-          m.stack.opacity(1);
-        }
-      }
-    }, desc: 'toggle stack',
-    bool: false
-  },
-  //cluster should inherit properties of germ and toggle
-  'f': {
-    fnctn: function () {
-      //m.group.hide();
-      if (!m.germ) {
-        let l = m;
-        m = new prismCluster(l, random(3, 6));
-        l.delete(); //delete germ
-        m.background();
-        m.drawRandomThrees(); //draw random threes
-
-        this.bool = true;
-      }
-      else {
-        let l = m.germ;
-        m.delete();
-        m = l.copyTranslated(createVector(0, 0));
-
-        this.bool = false;
-
-      }
-      // m.background();
-      // m.drawRandomThrees();
-    }, desc: 'draw cluster with random threes, creating broken geometry',
-    bool: false
-  },
-
-
-  'g': {
-    fnctn: function () { //change background
-      // let img_pattern = `<pattern id="img1" patternUnits="userSpaceOnUse" width="${cvs_width}" height="${cvs_height}">
-      // <image href="${folder+img_file}" x="0" y="0" width="${cvs_width}" height="auto" />
-      // </pattern>`;
-      //let img_path = img_file;
-      //maybe: https://stackoverflow.com/questions/3796025/fill-svg-path-element-with-a-background-image
-      let stages = [{ bg: 'white', stroke: 'black', fill: 'gray' },
-      { bg: 'black', stroke: 'white', fill: 'gray' },
-      { bg: 'black', stroke: 'white', fill: img_pattern },
-      { bg: 'white', stroke: 'white', fill: img_pattern },
-      { bg: bg_pattern, stroke: 'black', fill: 'white' },
-      { bg: bg_pattern, stroke: 'white', fill: 'black' },
-      ];
-
-      this.stage = (this.stage + 1) % stages.length;
-      let stage = stages[this.stage];
-     
-      cvs_bg.fill(stage.bg);
-      //cvs_bg.animate().attr({ fill: stage.bg });
-
-      //m.delete();
-      m.updateStroke(stage.stroke);
-      m.updateBackfill(stage.fill);
-      strk = stage.stroke;
-      fll = stage.fill;
-      if(stage.fill == img_pattern){
-        m.bg.opacity(1); //if image is background, make opaque
-        m.bg.attr('filter', 'grayscale(1);blur(5px)'); //blur background image
-
-      }
-
-
-
-    }, desc: 'change canvas background',
-    stage: 0
-  },
-  'h': {
-    fnctn: function () {
-      // if(m.bg.opacity() == 0){m.bg.opacity(1);}
-      // m.toggleMask();
-      m.delete();
-      m = placePrism();
-    }, desc: 'change current prism for new',
-    bool: false
-  },
-
-
-  // 'k': {
-  //   fnctn: function () {
-  //     // if (bg_image.style.filter != 'grayscale(100%)') {
-  //     bg_image.style.filter = 'grayscale(100%)';
-  //     // } else {
-  //     //   bg_image.style.filter = 'grayscale(0%)';
-  //     // }
-  //   }, desc: 'toggle grayscale background', bool: false
-  // },
-
-}
 
 //different actions on keypress
 function keyPressed() {

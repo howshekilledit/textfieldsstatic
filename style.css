@@ -304,13 +304,20 @@ form button {
   top: 1em;
   z-index: 2;
 }
+@media only screen and (max-width: 600px) {
+  .keyboard {
+    left: 0.5em;
+    top: 0.5em;
+  }
+}
 .keyboard.arrows {
   display: none;
 }
 @media only screen and (max-width: 600px) {
   .keyboard.arrows {
     display: block;
-    bottom: 1em;
+    bottom: 0.5em;
+    left: 0.5em;
     top: auto;
   }
 }
@@ -341,6 +348,12 @@ form button {
   }
   100% {
     border-color: rgba(0, 0, 0, 0);
+  }
+}
+@media only screen and (max-width: 600px) {
+  .keyboard .key,
+.keyboard .keytext {
+    margin: 0.03em;
   }
 }
 .keyboard .key.active,
