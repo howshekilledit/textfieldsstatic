@@ -131,6 +131,11 @@ body.noscroll {
   z-index: 4;
   padding: 2em;
 }
+@media only screen and (max-width: 600px) {
+  #instructions #instructions-text {
+    font-size: medium;
+  }
+}
 #instructions #instructions_close {
   position: absolute;
   top: 1em;
@@ -378,6 +383,23 @@ form button {
   .keyboard .ctrl_tggl {
     display: none;
   }
+}
+
+.ctr {
+  text-align: center;
+}
+
+#enter {
+  text-decoration: none;
+  color: white;
+  padding: 1em;
+  background: black;
+  display: block;
+  margin-bottom: 0.6em;
+  background: black;
+}
+#enter:hover {
+  text-transform: uppercase;
 }
 
 /*# sourceMappingURL=style.css.map */

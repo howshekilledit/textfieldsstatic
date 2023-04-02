@@ -148,9 +148,12 @@ body {
     z-index: 5;
     display: none;
     color: white;
-
+  
     #instructions-text {
         font-size: large;
+        @include mobile{
+            font-size: medium;
+        }
         position: absolute;
         top: 50%;
         left: 50%;
@@ -163,6 +166,8 @@ body {
         padding: 2em;
 
     }
+
+ 
 
     #instructions_close {
         position: absolute;
@@ -185,6 +190,7 @@ body {
         cursor: pointer;
     }
 }
+
 
 .textpage {
     font-family: $main_font;
@@ -474,5 +480,16 @@ form {
     //         //display:none;;
     //     }
     // }
+
+}
+.ctr{text-align:center; }
+#enter{ text-decoration:none; color:white; padding:1em; background:black; display:block;
+    //square gradient background
+    margin-bottom:0.6em;     
+    background:black;
+    //animate box shadow
+   &:hover{text-transform:uppercase;}
+
+
 
 }
