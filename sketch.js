@@ -36,7 +36,7 @@ function setup() {
 
   image_dim = createVector();
   //if portrait create pattern dimensions sclaed to image height
-  if (windowWidth < windowHeight) { //if portrait, switch to appropraitely sized bg image
+  if (cvs < cvs_height) { //if portrait, switch to appropraitely sized bg image
     img_file = p_img_file;
     bg_img = p_img;
     image_dim.x = cvs_height * p_img.width / p_img.height;
@@ -49,6 +49,8 @@ function setup() {
     //scale image height to image width
     image_dim.y = cvs_width * l_img.height / l_img.width;
   }
+  console.log(image_dim);
+
 
   //create svg pattern with image
 

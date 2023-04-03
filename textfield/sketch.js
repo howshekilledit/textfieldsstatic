@@ -194,29 +194,36 @@ function setup() {
   let image_dim; //image dimensions
 
   image_dim = createVector();
+  let scale; //scale factor for image
   //if portrait create pattern dimensions sclaed to image height
-  if (windowWidth < windowHeight) { //if portrait, switch to appropraitely sized bg image
+  if (cvs_width<cvs_height) { //if portrait, switch to appropraitely sized bg image
     img_file = p_img_file;
     bg_img = p_img;
-    image_dim.x = cvs_height * p_img.width / p_img.height;
-    image_dim.y = cvs_height;
+    image_dim = createVector(p_img.width, p_img.height);
+    scale = cvs_height/p_img.height;
     //mobile = true; //so we can demo mobile in browser, comment this out for production
   } else { //if landscape, switch to appropraitely sized bg image
     img_file = l_img_file;
     bg_img = l_img;
-    image_dim.x = cvs_width;
-    //scale image height to image width
-    image_dim.y = cvs_width * l_img.height / l_img.width;
+    image_dim = createVector(l_img.width, l_img.height);
+    scale = cvs_width/l_img.width;
   }
-
+  console.log(image_dim);
   //create svg pattern with image
+  //create pattern with iamge scaled to canvas
 
   img_pattern = cvs.pattern(image_dim.x, image_dim.y, function (add) {
-    add.image(img_file, 0, 0, image_dim.x, image_dim.y);
+    add.image(img_file, 0, 0, 1, 1).attr({ preserveAspectRatio: 'xMidYMid slice' });
   });
+
+  
   bg_pattern = cvs.pattern(image_dim.x, image_dim.y, function (add) {
-    add.image(img_file, 0, 0, image_dim.x, image_dim.y);
+    add.image(img_file, 0, 0, 1, 1).attr({'scale': '0.5'});
+
   });
+  bg_pattern.attr({'patternTransform': `scale(${scale})`});
+  img_pattern.attr({'patternTransform': `scale(${scale})`});
+  //bg_pattern.attr({'patternContentUnits': 'objectBoundingBox',  'viewBox' : '0 0 1 1'});
   //create circle and clip with pattern
 
 
