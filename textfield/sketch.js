@@ -169,7 +169,7 @@ let keyFunctions = {
     }, desc: 'change canvas background',
     stage: 0
   },
-  'i': {
+  'j': {
     fnctn: function () {
       // if(m.bg.opacity() == 0){m.bg.opacity(1);}
       // m.toggleMask();
@@ -223,8 +223,7 @@ function setup() {
   });
   bg_pattern.attr({'patternTransform': `scale(${scale})`});
   img_pattern.attr({'patternTransform': `scale(${scale})`});
-  //bg_pattern.attr({'patternContentUnits': 'objectBoundingBox',  'viewBox' : '0 0 1 1'});
-  //create circle and clip with pattern
+ 
 
 
   //place initial prism 

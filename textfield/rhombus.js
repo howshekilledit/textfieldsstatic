@@ -1,17 +1,13 @@
 //class for a collection of facets (dimensional shape)
 let prism = class {
-  constructor(facets = [], container = cvs, clrs = ['black', 'white'], stroke = "black", backfill = "white", mask = {width: cvs_width, height: cvs_height, fill: img_pattern}) { //constructor based on list of facet instances
+  constructor(facets = [], container = cvs, clrs = ['black', 'white'], stroke = "black", backfill = "white") { //constructor based on list of facet instances
     this.fcts = facets;
     this.container = container;
     this.group = this.container.group();
     this.colors = clrs;
     this.stroke = stroke;
     this.backfill = backfill;
-    if(mask.width){
-      this.mask = this.container.mask().add(this.container.rect(mask.width, mask.height).fill(mask.fill));
-    }
-    this.masked = false; //is the prism masked?
-
+   
     
   }
   preload() {
@@ -866,10 +862,7 @@ class prismCluster {
     for (let p of this.prisms) {
       p.background(this.bg, this.backfill);
     }
-    if (this.germ.masked) {
-      this.mask = this.germ.mask; //this is the mask for the whole cluster
-      this.bg.maskWith(this.germ.mask);
-    }
+
   }
   drawRandomThrees() {
     this.lines = [];
